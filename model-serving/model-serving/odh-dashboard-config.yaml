@@ -15,14 +15,6 @@ spec:
         requests:
           cpu: '1'
           memory: 1Gi
-    - name: Medium
-      resources:
-        limits:
-          cpu: '2'
-          memory: 10Gi
-        requests:
-          cpu: '1'
-          memory: 8Gi
   notebookController:
     enabled: true
     notebookNamespace: rhods-notebooks

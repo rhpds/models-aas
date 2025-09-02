@@ -2,9 +2,10 @@ apiVersion: serving.kserve.io/v1beta1
 kind: InferenceService
 metadata:
   annotations:
-    openshift.io/display-name: granite-3dot2-8b-instruct
+    openshift.io/display-name: granite-3.2-8b-instruct
     serving.kserve.io/deploymentMode: RawDeployment
-  name: granite-3dot2-8b-instruct
+  name: granite-3-2-8b-instruct
+  namespace: llm-hosting
   labels:
     opendatahub.io/dashboard: 'true'
 spec:
@@ -24,11 +25,10 @@ spec:
           cpu: '2'
           memory: 8Gi
           nvidia.com/gpu: '1'
-      runtime: granite-3dot2-8b-instruct
+      runtime: granite-3-2-8b-instruct
       storageUri: 'oci://quay.io/redhat-ai-services/modelcar-catalog:granite-3.2-8b-instruct'
     containerConcurrency: 1
     tolerations:
     - key: "nvidia.com/gpu"
-      operator: "Equal"
-      value: "l40-gpu"
+      operator: "Exists"
       effect: "NoSchedule"

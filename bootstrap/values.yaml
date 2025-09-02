@@ -10,20 +10,7 @@ deployer:
   domain: apps.cluster-guid.sandbox.opentlc.com
   apiUrl: https://api.cluster-guid.sandbox.opentlc.com:6443
 
-workspace:
-  git:
-    url: https://github.com/redhat-gpte-devopsautomation/private-llm-aas
-    revision: main
-    path: workspace
-  devworkspace:
-    projects:
-      repoUrl: https://github.com/taylorjordanNC/coding-exercises
-      revision: main
-    components:
-      - name: tooling
-        container:
-          image: registry.redhat.io/devspaces/udi-rhel9:latest
-          sourceMapping: /projects
+workspace: ""
 
 threeScale:
   namespace: 3scale
@@ -32,28 +19,18 @@ threeScale:
   path: 3scale
   channel: threescale-2.15
   startingCSV: 3scale-operator.v0.12.3
+  values:
+    repoURL: https://github.com/rhpds/models-aas
+    targetRevision: main
+    path: 3scale/helm-apis-values.yaml
 
 cmsUpload:
-  repoURL: https://github.com/redhat-gpte-devopsautomation/private-llm-aas
+  repoURL: https://github.com/rhpds/models-aas
   targetRevision: main
   path: 3scale/cms-upload
 
 llmaas:
-  repoURL: https://github.com/redhat-gpte-devopsautomation/private-llm-aas
+  repoURL: https://github.com/rhpds/models-aas
   targetRevision: main
   path: model-serving
 
-slackMcpSecret:
-  namespace: lls-demo
-  name: slack-secret
-  path: mcp_servers
-  slackBotToken: secret
-  slackTeamId: secret
-  graniteToken: secret
-  llamaToken: secret
-
-llamaStack:
-  repoURL: https://github.com/redhat-gpte-devopsautomation/private-llm-aas
-  targetRevision: main
-  path: llama-stack
-  namespace: lls-demo

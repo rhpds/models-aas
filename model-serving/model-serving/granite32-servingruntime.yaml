@@ -1,20 +1,16 @@
----
 apiVersion: serving.kserve.io/v1alpha1
 kind: ServingRuntime
 metadata:
   annotations:
-    opendatahub.io/accelerator-name: ''
     opendatahub.io/apiProtocol: REST
     opendatahub.io/recommended-accelerators: '["nvidia.com/gpu"]'
-    opendatahub.io/template-display-name: 'vLLM-RHOAI-2.22'
-    opendatahub.io/template-name: vllm-rhoai-2.22
-    openshift.io/display-name: vLLM-RHOAI-2.22
-  name: vllm-rhoai-2.22
-  namespace: llm-hosting  
+    opendatahub.io/template-display-name: vLLM ServingRuntime for KServe
+    opendatahub.io/template-name: vllm-runtime
+    openshift.io/display-name: granite-3.2-8b-instruct
+  name: granite-3-2-8b-instruct
+  namespace: llm-hosting
   labels:
-    component: aiworkshop
     opendatahub.io/dashboard: 'true'
-    rht-gitops.com/openshift-gitops: model-serving
 spec:
   annotations:
     prometheus.io/path: /metrics
@@ -23,6 +19,14 @@ spec:
     - args:
         - '--port=8080'
         - '--model=/mnt/models'
+        - '--served-model-name={{.Name}}'
+        - '--enable-auto-tool-choice'
+        - '--tool-call-parser'
+        - granite
+        - '--chat-template'
+        - /app/data/template/tool_chat_template_granite.jinja
+        - '--max-model-len'
+        - '120000'
       command:
         - python
         - '-m'
@@ -30,7 +34,11 @@ spec:
       env:
         - name: HF_HOME
           value: /tmp/hf_home
-      image: 'quay.io/modh/vllm:rhoai-2.22-cuda'
+        - name: VLLM_USE_MODELSCOPE
+          value: "False"
+        - name: TRANSFORMERS_OFFLINE
+          value: "1"          
+      image: 'quay.io/modh/vllm:rhoai-2.23-cuda'
       name: kserve-container
       ports:
         - containerPort: 8080

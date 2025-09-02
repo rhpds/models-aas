@@ -4,15 +4,3 @@
 
 username: user1
 namespace: wksp
-
-devworkspace:
-  name: exercises
-  devfile: http://devspaces-dashboard.openshift-devspaces.svc.cluster.local:8080/dashboard/api/editors/devfile?che-editor=che-incubator/che-code/latest
-  projects:
-    repoUrl: https://github.com/taylorjordanNC/coding-exercises
-    revision: main
-  components:
-    - name: tooling
-      container:
-        image: registry.redhat.io/devspaces/udi-rhel9:latest
-        sourceMapping: /projects

@@ -2,6 +2,7 @@ kind: Secret
 apiVersion: v1
 metadata:
   name: granite-32-8b-instruct
+  namespace: llm-hosting
   labels:
     opendatahub.io/dashboard: 'true'
   annotations:

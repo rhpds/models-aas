@@ -12,7 +12,7 @@ spec:
       path: {{ .Values.threeScale.path }}
       helm:
         valueFiles:
-          - $values/3scale/helm-apis-values.yaml
+          - $values/{{ .Values.threeScale.values.path }}
         values: |
           namespace: {{ .Values.threeScale.namespace }}
           operator:
@@ -47,8 +47,8 @@ spec:
             password: openshift
             service: granite-3dot2-8b-instruct
 {{- end }}
-    - repoURL: https://github.com/redhat-gpte-devopsautomation/private-llm-aas
-      targetRevision: main
+    - repoURL: {{ .Values.threeScale.values.repoURL }}
+      targetRevision: {{ .Values.threeScale.values.targetRevision }}
       ref: values
   destination:
     namespace: {{ .Values.threeScale.namespace }}
