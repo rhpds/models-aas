@@ -27,10 +27,6 @@ spec:
           {{ .Values.rhoai.datasciencecluster | toYaml | nindent 10 | trim }}
         {{- end }}
         {{- end }}
-        patcher:
-          namespace: redhat-ods-applications
-          dashboard:
-            replicas: 1
         helper-status-checker:
           approver: true
           checks:
