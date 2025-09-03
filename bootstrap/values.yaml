@@ -12,6 +12,43 @@ deployer:
 
 workspace: ""
 
+# Set to empty to NOT install the rhoai
+# rhoai: ''
+rhoai:
+  repoURL: https://github.com/rhpds/ocp-cluster-addons
+  targetRevision: main
+  path: rhoai
+  namespace: redhat-ods-operator
+  startingCSV: rhods-operator.2.23.0
+  # Set to empty to NOT install the datasciencecluster
+  # Not defining the key installs the datasciencecluster
+  # using the chart defaults (see rhoai/values.yaml)
+  # datasciencecluster: ''
+  datasciencecluster:
+    components:
+      dashboard:
+        managementState: Managed
+      workbenches:
+        managementState: Managed
+      codeflare:
+        managementState: Removed
+      datasciencepipelines:
+        managementState: Managed
+      kserve:
+        managementState: Managed
+      kueue:
+        managementState: Removed
+      modelmeshserving:
+        managementState: Managed
+      modelregistry:
+        managementState: Removed
+      ray:
+        managementState: Removed
+      trainingoperator:
+        managementState: Removed
+      trustyai:
+        managementState: Removed
+
 threeScale:
   namespace: 3scale
   repoURL: https://github.com/rhpds/ocp-cluster-addons
