@@ -69,5 +69,5 @@ cmsUpload:
 llmaas:
   repoURL: https://github.com/rhpds/models-aas
   targetRevision: main
-  path: model-serving
+  path: model-serving/model-serving
 
