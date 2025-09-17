@@ -25,7 +25,6 @@ spec:
         - '--served-model-name={{.Name}}'
         - '--enable-auto-tool-choice'
         - '--tool-call-parser=llama'
-        - '--chat-template=/opt/vllm/chat_templates/llama_tool_chat_template.jinja'
         - '--max-model-len'
         - '16384'
       command:
