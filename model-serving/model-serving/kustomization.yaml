@@ -19,5 +19,6 @@ resources:
 - granite32-inferenceservice.yaml
 - granite32-oci-data-connection.yaml
 - granite32-servingruntime.yaml
+- codellama7b-inferenceservice.yaml
 - nvidia-gpu-monitoring-dashboard-job.yaml
 #- nomic-embed-raw.yaml
