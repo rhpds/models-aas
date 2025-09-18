@@ -43,10 +43,10 @@ spec:
           users:
 {{- $userCount := int .Values.user.count }}
 {{- range $index := until $userCount }}
-          - name: {{ $.Values.user.prefix }}{{ add $index 1}}
+          - name: {{ $.Values.user.prefix }}{{ add $index 1}}-granite
             password: openshift
             service: granite-8b-code-instruct
-          - name: {{ $.Values.user.prefix }}{{ add $index 1}}
+          - name: {{ $.Values.user.prefix }}{{ add $index 1}}-mistral
             password: openshift
             service: mistral-7b-instruct-v0-3
 {{- end }}
