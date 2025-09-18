@@ -86,7 +86,7 @@ spec:
     tolerations:
       - effect: NoSchedule
         key: nvidia.com/gpu
-        value: "l4-gpu"
+        value: "T4-gpu"
         operator: Equal
 ---
 kind: Secret
