@@ -40,16 +40,7 @@ spec:
                 syncwave: '1'
                 serviceAccount:
                   name: "3scale-status-checker"
-          users:
-{{- $userCount := int .Values.user.count }}
-{{- range $index := until $userCount }}
-          - name: {{ $.Values.user.prefix }}{{ add $index 1}}-granite
-            password: openshift
-            service: granite-3-2-8b-instruct-predictor
-          - name: {{ $.Values.user.prefix }}{{ add $index 1}}-mistral
-            password: openshift
-            service: mistral-7b-instruct-v0-3
-{{- end }}
+          users: ""
     - repoURL: {{ .Values.threeScale.values.repoURL }}
       targetRevision: {{ .Values.threeScale.values.targetRevision }}
       ref: values
