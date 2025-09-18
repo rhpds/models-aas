@@ -357,7 +357,7 @@
                 class="language-badge">Bash</span></h3>
         <pre>
 <code>curl -X 'POST' \
-    'https://granite-3-3-8b-instruct-maas-apicast-production.apps.prod.rhoai.rh-aiservices-bu.com:443/v1/completions' \
+    'https://granite-3-3-8b-instruct-maas-apicast-production.apps.maas.redhatworkshops.io:443/v1/completions' \
     -H 'accept: application/json' \
     -H 'Content-Type: application/json' \
     -H 'Authorization: Bearer ***************************' \
@@ -381,7 +381,7 @@ import urllib3
 import numpy as np
 import json
 
-API_URL = "https://granite-3-3-8b-instruct-maas-apicast-production.apps.prod.rhoai.rh-aiservices-bu.com:443"
+API_URL = "https://granite-3-3-8b-instruct-maas-apicast-production.apps.maas.redhatworkshops.io:443"
 API_KEY = "***************************"
 
 input = ["San Francisco is a"]
@@ -420,7 +420,7 @@ print(completion)</code>
     
     llm = ChatOpenAI(
         openai_api_key="*************************",   # Private model, we don't need a key
-        openai_api_base="https://granite-3-3-8b-instruct-maas-apicast-production.apps.prod.rhoai.rh-aiservices-bu.com:443/v1",
+        openai_api_base="https://granite-3-3-8b-instruct-maas-apicast-production.apps.maas.redhatworkshops.io:443/v1",
         model_name="granite-3-3-8b-instruct",
         temperature=0.01,
         max_tokens=512,
@@ -468,7 +468,7 @@ print(completion)</code>
       "title": "Granite-8B-Instruct",
       "provider": "openai",
       "model": "granite-3-3-8b-instruct",
-      "apiBase": "https://granite-3-3-8b-instruct-maas-apicast-production.apps.prod.rhoai.rh-aiservices-bu.com:443/v1/",
+      "apiBase": "https://granite-3-3-8b-instruct-maas-apicast-production.apps.maas.redhatworkshops.io:443/v1/",
       "apiKey": "************************",
       "completionOptions": {
         "temperature": 0.1,
@@ -484,7 +484,7 @@ print(completion)</code>
     "title": "Granite-8B-Instruct",
     "provider": "openai",
     "model": "granite-3-3-8b-instruct",
-    "apiBase": "https://granite-3-3-8b-instruct-maas-apicast-production.apps.prod.rhoai.rh-aiservices-bu.com:443/v1/",
+    "apiBase": "https://granite-3-3-8b-instruct-maas-apicast-production.apps.maas.redhatworkshops.io:443/v1/",
     "apiKey": "****************************",
     "completionOptions": {
       "temperature": 0.1,
@@ -524,7 +524,7 @@ print(completion)</code>
                 class="language-badge">Bash</span></h3>
         <pre>
 <code>curl -X 'POST' \
-  'https://nomic-embed-text-v1-5-maas-apicast-production.apps.prod.rhoai.rh-aiservices-bu.com:443/v1/embeddings'  \
+  'https://nomic-embed-text-v1-5-maas-apicast-production.apps.maas.redhatworkshops.io:443/v1/embeddings'  \
   -H 'accept: application/json' \
   -H 'Content-Type: application/json' \
   -H 'Authorization: Bearer **************************' \
@@ -557,7 +557,7 @@ import urllib3
 import numpy as np
 import json
 
-API_URL = "https://nomic-embed-text-v1-5-maas-apicast-production.apps.prod.rhoai.rh-aiservices-bu.com:443"
+API_URL = "https://nomic-embed-text-v1-5-maas-apicast-production.apps.maas.redhatworkshops.io:443"
 API_KEY = "*************************"
 
 test_strings = ["That is a happy dog","That is a very happy person","Today is a sunny day"]
@@ -584,7 +584,7 @@ print(embeddings)</code>
         <pre>
 <code>from langchain_openai import OpenAIEmbeddings
 
-API_URL = "https://nomic-embed-text-v1-5-maas-apicast-production.apps.prod.rhoai.rh-aiservices-bu.com:443"
+API_URL = "https://nomic-embed-text-v1-5-maas-apicast-production.apps.maas.redhatworkshops.io:443"
 API_KEY = "*************************"
 
 embeddings_model = OpenAIEmbeddings(
@@ -614,7 +614,7 @@ print(embeddings)</code>
     "title": "Nomic-embed-text-v1.5",
     "provider": "openai",
     "model": "/mnt/models",
-    "apiBase": "https://nomic-embed-text-v1-5-maas-apicast-production.apps.prod.rhoai.rh-aiservices-bu.com:443/v1/",
+    "apiBase": "https://nomic-embed-text-v1-5-maas-apicast-production.apps.maas.redhatworkshops.io:443/v1/",
     "apiKey": "*************************",
     "maxBatchSize": 32
   },
