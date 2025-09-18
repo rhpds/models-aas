@@ -45,7 +45,7 @@ spec:
 {{- range $index := until $userCount }}
           - name: {{ $.Values.user.prefix }}{{ add $index 1}}-granite
             password: openshift
-            service: granite-8b-code-instruct
+            service: granite-3-2-8b-instruct-predictor
           - name: {{ $.Values.user.prefix }}{{ add $index 1}}-mistral
             password: openshift
             service: mistral-7b-instruct-v0-3
