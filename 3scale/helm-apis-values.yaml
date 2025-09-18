@@ -1,10 +1,10 @@
 # https://github.com/3scale/3scale-operator/blob/master/doc/product-reference.md
 
 apis:
-  - name: granite-8b-code-instruct
+  - name: granite-3-2-8b-instruct-predictor
     activeDocOpenAPIRef: https://raw.githubusercontent.com/rhpds/models-aas/refs/heads/main/bootstrap/3scale/api_definitions/granite-8b-code-instruct.json
     backend:
-      privateBaseURL: http://granite-8b-code-instruct-128k-predictor.llm-hosting.svc.cluster.local:8080
+      privateBaseURL: http://granite-3-2-8b-instruct-predictor.llm-hosting.svc.cluster.local:8080
       path: /
     deployment:
       apicastHosted:
