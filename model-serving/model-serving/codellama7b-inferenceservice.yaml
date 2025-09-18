@@ -90,4 +90,5 @@ spec:
     tolerations:
       - effect: NoSchedule
         key: nvidia.com/gpu
-        operator: Exists
+        value: "L40S-gpu"
+        operator: Equal
