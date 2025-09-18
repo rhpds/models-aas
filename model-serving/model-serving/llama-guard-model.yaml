@@ -1,0 +1,105 @@
+---
+apiVersion: serving.kserve.io/v1alpha1
+kind: ServingRuntime
+metadata:
+  annotations:
+    opendatahub.io/accelerator-name: ''
+    opendatahub.io/apiProtocol: REST
+    opendatahub.io/template-display-name: vLLM ServingRuntime for KServe - vLLM RHOAI 2.21
+    opendatahub.io/template-name: vllm-runtime-rhoai-221
+    openshift.io/display-name: llama-guard-3-1b
+  name: llama-guard-3-1b
+  namespace: llm-hosting
+  labels:
+    opendatahub.io/dashboard: 'true'
+spec:
+  annotations:
+    prometheus.io/path: /metrics
+    prometheus.io/port: '8080'
+  containers:
+    - args:
+        - '--port=8080'
+        - '--model=/mnt/models'
+        - '--served-model-name={{.Name}}'
+        - '--distributed-executor-backend=mp'
+        - '--max-model-len'
+        - '6048'
+        - '--dtype=half'
+        - '--enable-chunked-prefill'
+      command:
+        - python
+        - '-m'
+        - vllm.entrypoints.openai.api_server
+      env:
+        - name: HF_HOME
+          value: /tmp/hf_home
+      image: 'quay.io/modh/vllm:rhoai-2.21-cuda'
+      name: kserve-container
+      ports:
+        - containerPort: 8080
+          protocol: TCP
+      volumeMounts:
+        - mountPath: /dev/shm
+          name: shm
+  multiModel: false
+  supportedModelFormats:
+    - autoSelect: true
+      name: vLLM
+  volumes:
+    - emptyDir:
+        medium: Memory
+        sizeLimit: 2Gi
+      name: shm
+---
+apiVersion: serving.kserve.io/v1beta1
+kind: InferenceService
+metadata:
+  annotations:
+    openshift.io/display-name: llama-guard-3-1b
+    serving.kserve.io/deploymentMode: RawDeployment
+  name: llama-guard-3-1b
+  namespace: llm-hosting
+  labels:
+    opendatahub.io/dashboard: 'true'
+spec:
+  predictor:
+    automountServiceAccountToken: false
+    maxReplicas: 1
+    minReplicas: 1
+    model:
+      args:
+          - '--served-model-name=meta-llama/Llama-Guard-3-1B'
+      modelFormat:
+        name: vLLM
+      name: ''
+      resources:
+        limits:
+          cpu: '12'
+          memory: 64Gi
+          nvidia.com/gpu: '1'
+        requests:
+          cpu: '1'
+          memory: 1Gi
+          nvidia.com/gpu: '1'
+      runtime: llama-guard-3-1b
+      storageUri: 'oci://quay.io/rh-aiservices-bu/llama-guard-3-1b-modelcar:2.0.0'
+    tolerations:
+      - effect: NoSchedule
+        key: nvidia.com/gpu
+        value: "l4-gpu"
+        operator: Equal
+---
+kind: Secret
+apiVersion: v1
+metadata:
+  name: llama-guard-3-1b
+  namespace: llm-hosting
+  labels:
+    opendatahub.io/dashboard: 'true'
+  annotations:
+    opendatahub.io/connection-type-ref: uri-v1
+    openshift.io/description: ''
+    openshift.io/display-name: llama-guard-3-1b
+data:
+  URI: b2NpOi8vcXVheS5pby9yaC1haXNlcnZpY2VzLWJ1L2xsYW1hLWd1YXJkLTMtMWItbW9kZWxjYXI6Mi4wLjAK
+type: Opaque
