@@ -9,6 +9,7 @@ metadata:
     opendatahub.io/template-name: docling-serve-runtime
     openshift.io/display-name: docling-serve
   name: docling-serve-v0.7.0
+  namespace: llm-hosting
   labels:
     opendatahub.io/dashboard: 'true'
 spec:
@@ -43,6 +44,7 @@ metadata:
     openshift.io/display-name: Docling Serve
     serving.kserve.io/deploymentMode: RawDeployment
   name: docling-v0-7-0
+  namespace: llm-hosting
   labels:
     opendatahub.io/dashboard: 'true'
 spec:
