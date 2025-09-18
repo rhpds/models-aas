@@ -22,5 +22,5 @@ resources:
 - codellama7b-inferenceservice.yaml
 - docling.yaml
 - llama-guard-model.yaml
+- nomic-embed-raw.yaml
 - nvidia-gpu-monitoring-dashboard-job.yaml
-#- nomic-embed-raw.yaml
