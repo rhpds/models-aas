@@ -1,47 +1,387 @@
 {% disable_client_cache %}
 
 <style>
+    /* Base styles */
+    body {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+        line-height: 1.6;
+        color: #333;
+    }
+
+    /* Header styles */
+    h1 {
+        color: #2c3e50;
+        border-bottom: 3px solid #3498db;
+        padding-bottom: 10px;
+        margin-bottom: 30px;
+    }
+
+    h2 {
+        color: #2c3e50;
+        margin-bottom: 20px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    h3 {
+        color: #34495e;
+        margin-top: 35px;
+        margin-bottom: 15px;
+        font-size: 1.3em;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    h3:first-child {
+        margin-top: 10px;
+    }
+
+    /* Code block styles */
+    pre {
+        background-color: #282c34;
+        color: #abb2bf;
+        padding: 20px;
+        border-radius: 8px;
+        overflow-x: auto;
+        position: relative;
+        margin: 15px 0;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    code {
+        font-family: "Fira Code", Consolas, Monaco, "Andale Mono", "Ubuntu Mono", monospace;
+        font-size: 14px;
+        line-height: 1.5;
+    }
+
+    /* Inline code */
+    p code,
+    li code {
+        background-color: #f0f0f0;
+        color: #e74c3c;
+        padding: 2px 6px;
+        border-radius: 3px;
+        font-size: 0.9em;
+    }
+
+    /* Tab styles */
+    .tab-container {
+        width: 100%;
+        margin-top: 20px;
+        background-color: #fff;
+        border-radius: 10px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    }
+
+    .tab-buttons {
+        display: flex;
+        border-bottom: 2px solid #e0e0e0;
+        margin-bottom: 0;
+        padding-left: 0;
+        list-style: none;
+        background-color: #f8f9fa;
+        border-radius: 10px 10px 0 0;
+        padding: 10px 10px 0 10px;
+    }
+
+    .tab-button {
+        padding: 12px 24px;
+        cursor: pointer;
+        background-color: transparent;
+        border: 2px solid transparent;
+        border-bottom: none;
+        margin-right: 5px;
+        border-radius: 8px 8px 0 0;
+        transition: all 0.3s ease;
+        font-weight: 500;
+        font-size: 16px;
+        color: #666;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .tab-button:hover {
+        background-color: #e8f4fd;
+        color: #2980b9;
+    }
+
+    .tab-button.active {
+        background-color: #fff;
+        border: 2px solid #e0e0e0;
+        border-bottom: 2px solid #fff;
+        position: relative;
+        top: 2px;
+        color: #2980b9;
+        font-weight: 600;
+        box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.05);
+    }
+
+    .tab-content {
+        display: none;
+        padding: 30px;
+        background-color: #fff;
+        animation: fadeIn 0.3s ease-in;
+    }
+
+    .tab-content.active {
+        display: block;
+    }
+
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(-10px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    /* Copy button styles */
+    .copy-button {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        background-color: #3498db;
+        color: white;
+        border: none;
+        padding: 6px 12px;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 12px;
+        transition: all 0.3s ease;
+        opacity: 0.8;
+    }
+
+    .copy-button:hover {
+        background-color: #2980b9;
+        opacity: 1;
+    }
+
+    .copy-button.copied {
+        background-color: #27ae60;
+    }
+
+    /* Prerequisites styles */
+    .prerequisites {
+        background-color: #fff3cd;
+        border-left: 4px solid #ffc107;
+        padding: 12px 20px;
+        margin: 15px 0;
+        border-radius: 4px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .prerequisites code {
+        background-color: rgba(0, 0, 0, 0.05);
+        color: #856404;
+    }
+
+    /* API key warning */
+    .api-key-warning {
+        background-color: #f8d7da;
+        border-left: 4px solid #dc3545;
+        padding: 15px 20px;
+        margin: 20px 0;
+        border-radius: 4px;
+        display: flex;
+        align-items: flex-start;
+        gap: 10px;
+    }
+
+    /* Quick navigation */
+    .quick-nav {
+        background-color: #f8f9fa;
+        padding: 15px;
+        border-radius: 8px;
+        margin-bottom: 20px;
+        border: 1px solid #e0e0e0;
+    }
+
+    .quick-nav h4 {
+        margin: 0 0 10px 0;
+        color: #666;
+        font-size: 14px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    .quick-nav-links {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+
+    .quick-nav-link {
+        background-color: #fff;
+        padding: 6px 12px;
+        border-radius: 20px;
+        text-decoration: none;
+        color: #3498db;
+        font-size: 14px;
+        border: 1px solid #3498db;
+        transition: all 0.3s ease;
+    }
+
+    .quick-nav-link:hover {
+        background-color: #3498db;
+        color: white;
+    }
+
+    /* Language badge */
+    .language-badge {
+        background-color: #e74c3c;
+        color: white;
+        padding: 2px 8px;
+        border-radius: 4px;
+        font-size: 12px;
+        font-weight: 500;
+        margin-left: 10px;
+    }
+
+    /* Icon styles */
+    .icon {
+        width: 20px;
+        height: 20px;
+        display: inline-block;
+        vertical-align: middle;
+    }
+
+    /* Responsive design */
+    @media (max-width: 768px) {
+        .tab-button {
+            padding: 10px 16px;
+            font-size: 14px;
+        }
+
+        .tab-content {
+            padding: 20px;
+        }
+
         pre {
-            background-color: #f4f4f4;
-            padding: 10px;
-            border-radius: 5px;
-            overflow-x: auto;
+            padding: 15px;
+            font-size: 12px;
         }
-        code {
-            color: #d63384;
-            font-family: Consolas, Monaco, "Andale Mono", "Ubuntu Mono", monospace;
+
+        .quick-nav-links {
+            flex-direction: column;
         }
-    </style>
 
-<h1>APIs Usage Examples</h1>
+        .quick-nav-link {
+            text-align: center;
+        }
+    }
 
-<h2>Text Generation (Mistral, Granite,...)</h2>
-<h3>Using Curl</h3>
-<pre>
-<code>
-curl -X 'POST' \
-    'https://granite-8b-code-instruct-maas-apicast-production.apps.llmaas.llmaas.redhatworkshops.io:443/v1/completions' \
+    /* Smooth scrolling */
+    html {
+        scroll-behavior: smooth;
+    }
+
+    /* Section dividers */
+    .section-divider {
+        height: 2px;
+        background: linear-gradient(to right, #3498db, transparent);
+        margin: 40px 0;
+        border: none;
+    }
+
+    /* Back to top link */
+    .back-to-top {
+        display: inline-block;
+        margin: 20px 0;
+        padding: 8px 16px;
+        background-color: #f8f9fa;
+        color: #3498db;
+        text-decoration: none;
+        border-radius: 20px;
+        border: 1px solid #e0e0e0;
+        font-size: 14px;
+        transition: all 0.3s ease;
+    }
+
+    .back-to-top:hover {
+        background-color: #3498db;
+        color: white;
+        border-color: #3498db;
+        transform: translateY(-2px);
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+
+    .back-to-top:before {
+        content: "↑ ";
+        margin-right: 5px;
+    }
+</style>
+
+<h1><span role="img" aria-label="Books">&#x1F4DA;</span> APIs Usage Examples</h1>
+
+<div class="api-key-warning">
+    <span role="img" aria-label="Warning">&#x26A0;&#xFE0F;</span>
+    <div>
+        <strong>Security Notice:</strong> The API keys shown in these examples are masked. Replace
+        <code>***************************</code> with your actual API key before using these examples.
+    </div>
+</div>
+
+<div class="tab-container">
+    <ul class="tab-buttons">
+        <li class="tab-button active" onclick="openTab(event, 'text-generation')">
+            <span role="img" aria-label="Speech Balloon">&#x1F4AC;</span> Text Generation
+        </li>
+        <li class="tab-button" onclick="openTab(event, 'embeddings')">
+            <span role="img" aria-label="Input Symbol for Letters">&#x1F524;</span> Embeddings
+        </li>
+    </ul>
+
+    <div id="text-generation" class="tab-content active">
+        <h2><span role="img" aria-label="Speech Balloon">&#x1F4AC;</span> Text Generation (Mistral, Granite,...)</h2>
+
+        <div class="quick-nav">
+            <h4>Quick Navigation</h4>
+            <div class="quick-nav-links">
+                <a href="#curl-text" class="quick-nav-link">cURL</a>
+                <a href="#python-text" class="quick-nav-link">Python</a>
+                <a href="#langchain-text" class="quick-nav-link">Langchain</a>
+                <a href="#continue-text" class="quick-nav-link">Continue.dev</a>
+            </div>
+        </div>
+
+        <h3 id="curl-text"><span role="img" aria-label="Wrench">&#x1F527;</span> Using Curl <span
+                class="language-badge">Bash</span></h3>
+        <pre>
+<code>curl -X 'POST' \
+    'https://granite-3-3-8b-instruct-maas-apicast-production.apps.prod.rhoai.rh-aiservices-bu.com:443/v1/completions' \
     -H 'accept: application/json' \
     -H 'Content-Type: application/json' \
     -H 'Authorization: Bearer ***************************' \
     -d '{
-    "model": "granite-8b-code-instruct-128k",
+    "model": "granite-3-3-8b-instruct",
     "prompt": "San Francisco is a",
     "max_tokens": 15,
     "temperature": 0
-}'
-</code>
-</pre>
+}'</code>
+<button class="copy-button" onclick="copyCode(this)">Copy</button>
+        </pre>
+        <a href="#top" class="back-to-top">Back to top</a>
 
-<h3>Using raw Python</h3>
-<pre>
-<code>
-import requests
+        <hr class="section-divider">
+
+        <h3 id="python-text"><span role="img" aria-label="Snake">&#x1F40D;</span> Using raw Python <span
+                class="language-badge">Python</span></h3>
+        <pre>
+<code>import requests
 import urllib3
 import numpy as np
 import json
 
-API_URL = "https://granite-8b-code-instruct-maas-apicast-production.llmaas.llmaas.redhatworkshops.iom:443"
+API_URL = "https://granite-3-3-8b-instruct-maas-apicast-production.apps.prod.rhoai.rh-aiservices-bu.com:443"
 API_KEY = "***************************"
 
 input = ["San Francisco is a"]
@@ -49,7 +389,7 @@ input = ["San Francisco is a"]
 completion = requests.post(
     url=API_URL+'/v1/completions',
     json={
-      "model": "granite-8b-code-instruct-128k",
+      "model": "granite-3-3-8b-instruct",
       "prompt": "San Francisco is a",
       "max_tokens": 15,
       "temperature": 0
@@ -57,40 +397,78 @@ completion = requests.post(
     headers={'Authorization': 'Bearer '+API_KEY}
 ).json()
 
-print(completion)
-</code>
-</pre>
+print(completion)</code>
+<button class="copy-button" onclick="copyCode(this)">Copy</button>
+        </pre>
+        <a href="#top" class="back-to-top">Back to top</a>
 
-<h3>Using Langchain</h3>
-Prerequisites: <code>pip install langchain-community</code>
-<pre>
-<code>
-from langchain_community.llms import VLLMOpenAI
+        <hr class="section-divider">
 
-API_URL = "https://granite-8b-code-instruct-maas-apicast-production.apps.llmaas.llmaas.redhatworkshops.io:443"
-API_KEY = "***************************"
+        <h3 id="langchain-text"><span role="img" aria-label="Link">&#x1F517;</span> Using Langchain <span
+                class="language-badge">Python</span></h3>
+        <div class="prerequisites">
+            <span role="img" aria-label="Package">&#x1F4E6;</span>
+            <span>Prerequisites: <code>pip install langchain==0.3.25 langchain-openai==0.3.22</code></span>
+        </div>
+        <pre>
+<code>import json
 
-llm = VLLMOpenAI(
-    openai_api_key=API_KEY,
-    openai_api_base=API_URL+"/v1",
-    model_name="granite-8b-code-instruct-128k",
-    model_kwargs={"stop": ["."]},
-)
-print(llm.invoke("Rome is"))
-</code>
-</pre>
+    from langchain_openai import ChatOpenAI
+    from langchain_core.prompts import ChatPromptTemplate
+    from langchain_core.prompts.chat import SystemMessagePromptTemplate, HumanMessagePromptTemplate
+    from langchain.callbacks.streaming_stdout import StreamingStdOutCallbackHandler
+    
+    llm = ChatOpenAI(
+        openai_api_key="*************************",   # Private model, we don't need a key
+        openai_api_base="https://granite-3-3-8b-instruct-maas-apicast-production.apps.prod.rhoai.rh-aiservices-bu.com:443/v1",
+        model_name="granite-3-3-8b-instruct",
+        temperature=0.01,
+        max_tokens=512,
+        streaming=True,
+        callbacks=[StreamingStdOutCallbackHandler()],
+        top_p=0.9,
+        presence_penalty=0.5,
+        model_kwargs={
+            "stream_options": {"include_usage": True}
+        }
+    )
+    
+    template = ChatPromptTemplate.from_messages([
+        SystemMessagePromptTemplate.from_template(
+            """You are a helpful, respectful, and honest assistant.
+            Answer each question clearly and concisely in a single response only.
+            Do not continue the conversation or simulate dialogue unless explicitly asked.
+            Never include any harmful, unethical, racist, sexist, toxic, dangerous, or illegal content.
+            Ensure that your responses are socially unbiased and positive in nature.
+            If a question does not make sense or is not factually coherent, explain why instead of trying to answer.
+            If you don't know the answer to a question, say "I don't know".
+            """),
+        HumanMessagePromptTemplate.from_template("{input}"),
+    ])
+    
+    query = "What is Artificial Intelligence?"
+    prompt = template.invoke({"input": query})
+    response = llm.invoke(input=prompt)
+    print()
+    print(json.dumps(response.usage_metadata, indent=2))</code>
+<button class="copy-button" onclick="copyCode(this)">Copy</button>
+        </pre>
+        <a href="#top" class="back-to-top">Back to top</a>
 
-<h3>Connecting Continue.dev to Granite-Code-Instruct</h3>
-Configuration in <code>.continue/config.json</code>
-<pre>
-<code>
-...
+        <hr class="section-divider">
+
+        <h3 id="continue-text"><span role="img" aria-label="Laptop">&#x1F4BB;</span> Connecting Continue.dev to
+            Granite-Code-Instruct <span class="language-badge">JSON</span></h3>
+        <p>Configuration in <code>.continue/config.json</code></p>
+        <pre>
+<code>{
+  ...
   "models": [
     {
       "title": "Granite-8B-Instruct",
       "provider": "openai",
-      "model": "granite-8b-code-instruct-128k",
-      "apiBase": "https://granite-8b-code-instruct-maas-apicast-production.apps.llmaas.llmaas.redhatworkshops.io:443/v1/",
+      "model": "granite-3-3-8b-instruct",
+      "apiBase": "https://granite-3-3-8b-instruct-maas-apicast-production.apps.prod.rhoai.rh-aiservices-bu.com:443/v1/",
       "apiKey": "************************",
       "completionOptions": {
         "temperature": 0.1,
@@ -100,13 +478,13 @@ Configuration in <code>.continue/config.json</code>
         "frequencyPenalty": 0
       }
     }
-  ]
-...
+  ],
+  ...
   "tabAutocompleteModel": {
     "title": "Granite-8B-Instruct",
     "provider": "openai",
-    "model": "granite-8b-code-instruct-128k",
-    "apiBase": "https://granite-8b-code-instruct-maas-apicast-production.apps.llmaas.llmaas.redhatworkshops.io:443/v1/",
+    "model": "granite-3-3-8b-instruct",
+    "apiBase": "https://granite-3-3-8b-instruct-maas-apicast-production.apps.prod.rhoai.rh-aiservices-bu.com:443/v1/",
     "apiKey": "****************************",
     "completionOptions": {
       "temperature": 0.1,
@@ -121,109 +499,197 @@ Configuration in <code>.continue/config.json</code>
     "maxPromptTokens": 1024,
     "prefixPercentage": 0.5
   },
-...
-</code>
-</pre>
+  ...
+}</code>
+<button class="copy-button" onclick="copyCode(this)">Copy</button>
+        </pre>
+        <a href="#top" class="back-to-top">Back to top</a>
+    </div>
 
+    <div id="embeddings" class="tab-content">
+        <h2><span role="img" aria-label="Input Symbol for Letters">&#x1F524;</span> Embeddings (Granite Embedding,
+            Nomic-Embed-Text,...)</h2>
 
-<h2>Embeddings (Nomic-Embed-Text,...)</h2>
-<h3>Using Curl</h3>
-<pre>
-<code>
-curl -X 'POST' \
-  'https://nomic-embed-text-v1-5-maas-apicast-production.apps.llmaas.llmaas.redhatworkshops.io:443/embed' \
+        <div class="quick-nav">
+            <h4>Quick Navigation</h4>
+            <div class="quick-nav-links">
+                <a href="#curl-embed" class="quick-nav-link">cURL</a>
+                <a href="#python-embed" class="quick-nav-link">Python</a>
+                <a href="#langchain-embed" class="quick-nav-link">Langchain</a>
+                <a href="#continue-embed" class="quick-nav-link">Continue.dev</a>
+            </div>
+        </div>
+
+        <h3 id="curl-embed"><span role="img" aria-label="Wrench">&#x1F527;</span> Using Curl <span
+                class="language-badge">Bash</span></h3>
+        <pre>
+<code>curl -X 'POST' \
+  'https://nomic-embed-text-v1-5-maas-apicast-production.apps.prod.rhoai.rh-aiservices-bu.com:443/v1/embeddings'  \
   -H 'accept: application/json' \
   -H 'Content-Type: application/json' \
-  -H 'Authorization: Bearer *************************' \
+  -H 'Authorization: Bearer **************************' \
   -d '{
-  "inputs": "string",
-  "normalize": true,
-  "truncate": false,
-  "truncation_direction": "Right"
-}'
-</code>
-</pre>
-<h3>Using raw Python</h3>
-<pre>
-<code>
-# Calling the base embeddings API
+  "model": "/mnt/models",
+  "input": [
+    "Embeddings test"
+  ],
+  "encoding_format": "float",
+  "user": "string",
+  "truncate_prompt_tokens": 1,
+  "additional_data": "string",
+  "add_special_tokens": true,
+  "priority": 0,
+  "additionalProp1": {}
+}'</code>
+<button class="copy-button" onclick="copyCode(this)">Copy</button>
+        </pre>
+        <a href="#top" class="back-to-top">Back to top</a>
+
+        <hr class="section-divider">
+
+        <h3 id="python-embed"><span role="img" aria-label="Snake">&#x1F40D;</span> Using raw Python <span
+                class="language-badge">Python</span></h3>
+        <pre>
+<code># Calling the OpenAI-compatible embeddings API
 
 import requests
 import urllib3
 import numpy as np
 import json
 
-API_URL = "https://nomic-embed-text-v1-5-maas-apicast-production.apps.llmaas.llmaas.redhatworkshops.io:443"
-API_KEY = "*************************"
-
-test_strings = ["That is a happy dog","That is a very happy person","Today is a sunny day"]
-
-embeddings = requests.post(
-    url=API_URL+'/embed',
-    json={"inputs": test_strings},
-    headers={'Authorization': 'Bearer '+API_KEY}
-).json()
-
-print(embeddings)
-</code>
-</pre>
-
-<pre>
-<code>
-# Calling the OpenAI-compatible embeddings API
-
-import requests
-import urllib3
-import numpy as np
-import json
-
-API_URL = "https://nomic-embed-text-v1-5-maas-apicast-production.apps.llmaas.llmaas.redhatworkshops.io:443"
+API_URL = "https://nomic-embed-text-v1-5-maas-apicast-production.apps.prod.rhoai.rh-aiservices-bu.com:443"
 API_KEY = "*************************"
 
 test_strings = ["That is a happy dog","That is a very happy person","Today is a sunny day"]
 
 embeddings = requests.post(
     url=API_URL+'/v1/embeddings',
-    json={"input": test_strings},
+    json={"input": test_strings, "model": "/mnt/models"},
     headers={'Authorization': 'Bearer '+API_KEY}
 ).json()
 
-print(embeddings)
-</code>
-</pre>
-<h3>Using Langchain</h3>
+print(embeddings)</code>
+<button class="copy-button" onclick="copyCode(this)">Copy</button>
+        </pre>
+        <a href="#top" class="back-to-top">Back to top</a>
 
-Prerequisites: <code>pip install langchain-openai</code>
-<pre>
-<code>
-from langchain_openai import OpenAIEmbeddings
+        <hr class="section-divider">
 
-API_URL = "https://nomic-embed-text-v1-5-maas-apicast-production.apps.llmaas.llmaas.redhatworkshops.iom:443"
+        <h3 id="langchain-embed"><span role="img" aria-label="Link">&#x1F517;</span> Using Langchain <span
+                class="language-badge">Python</span></h3>
+        <div class="prerequisites">
+            <span role="img" aria-label="Package">&#x1F4E6;</span>
+            <span>Prerequisites: <code>pip install langchain-openai</code></span>
+        </div>
+        <pre>
+<code>from langchain_openai import OpenAIEmbeddings
+
+API_URL = "https://nomic-embed-text-v1-5-maas-apicast-production.apps.prod.rhoai.rh-aiservices-bu.com:443"
 API_KEY = "*************************"
 
-embeddings_model = OpenAIEmbeddings(openai_api_base=API_URL, openai_api_key=API_KEY)
+embeddings_model = OpenAIEmbeddings(
+    openai_api_base=API_URL, 
+    openai_api_key=API_KEY, 
+    model="/mnt/models"
+)
 
 test_strings = ["That is a happy dog","That is a very happy person","Today is a sunny day"]
 
 embeddings = embeddings_model.embed_documents(test_strings)
 
-print(embeddings)
-    </code>
-</pre>
+print(embeddings)</code>
+<button class="copy-button" onclick="copyCode(this)">Copy</button>
+        </pre>
+        <a href="#top" class="back-to-top">Back to top</a>
 
-<h3>Connecting Continue.dev to Nomic-Embed-Text</h3>
-Configuration in <code>.continue/config.json</code>
-<pre>
-<code>
-...
+        <hr class="section-divider">
+
+        <h3 id="continue-embed"><span role="img" aria-label="Laptop">&#x1F4BB;</span> Connecting Continue.dev to
+            Nomic-Embed-Text <span class="language-badge">JSON</span></h3>
+        <p>Configuration in <code>.continue/config.json</code></p>
+        <pre>
+<code>{
+  ...
   "embeddingsProvider": {
     "title": "Nomic-embed-text-v1.5",
     "provider": "openai",
-    "model": "nomic-embed-text-v1.5",
-    "apiBase": "https://nomic-embed-text-v1-5-maas-apicast-production.apps.llmaas.llmaas.redhatworkshops.io:443/v1/",
+    "model": "/mnt/models",
+    "apiBase": "https://nomic-embed-text-v1-5-maas-apicast-production.apps.prod.rhoai.rh-aiservices-bu.com:443/v1/",
     "apiKey": "*************************",
     "maxBatchSize": 32
   },
-...
-</code>
-</pre>
+  ...
+}</code>
+<button class="copy-button" onclick="copyCode(this)">Copy</button>
+        </pre>
+        <a href="#top" class="back-to-top">Back to top</a>
+    </div>
+</div>
+
+<script>
+    function openTab(evt, tabName) {
+        var i, tabcontent, tabbuttons;
+
+        // Hide all tab contents
+        tabcontent = document.getElementsByClassName("tab-content");
+        for (i = 0; i < tabcontent.length; i++) {
+            tabcontent[i].classList.remove("active");
+        }
+
+        // Remove active class from all buttons
+        tabbuttons = document.getElementsByClassName("tab-button");
+        for (i = 0; i < tabbuttons.length; i++) {
+            tabbuttons[i].classList.remove("active");
+        }
+
+        // Show the selected tab and mark button as active
+        document.getElementById(tabName).classList.add("active");
+        evt.currentTarget.classList.add("active");
+    }
+
+    function copyCode(button) {
+        const pre = button.parentElement;
+        const code = pre.querySelector('code');
+        const text = code.textContent;
+
+        navigator.clipboard.writeText(text).then(function () {
+            button.textContent = '✓ Copied!';
+            button.classList.add('copied');
+
+            setTimeout(function () {
+                button.textContent = 'Copy';
+                button.classList.remove('copied');
+            }, 2000);
+        }, function (err) {
+            console.error('Could not copy text: ', err);
+            button.textContent = 'Copy failed';
+        });
+    }
+
+    function scrollToTop() {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // Add smooth scrolling for navigation links
+    document.addEventListener('DOMContentLoaded', function () {
+        const navLinks = document.querySelectorAll('.quick-nav-link');
+        navLinks.forEach(link => {
+            link.addEventListener('click', function (e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href').substring(1);
+                const targetElement = document.getElementById(targetId);
+                if (targetElement) {
+                    targetElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        });
+
+        const backToTopLinks = document.querySelectorAll('.back-to-top');
+        backToTopLinks.forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                scrollToTop();
+            });
+        });
+    });
+</script>

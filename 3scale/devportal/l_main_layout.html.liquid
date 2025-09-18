@@ -36,11 +36,15 @@
 	}
 
 	.page-header {
-  		background-image: url(/images/rhoai.png);
+  		background-image: url(/images/parasol-band.png);
+      	background-size: auto;
 	}
 	</style>
 
   <body>
+    <div id="maintenance-banner" style="background-color: #6baa6b; color: white; padding: 15px; text-align: center; font-weight: bold; position: relative; z-index: 9999;">
+  <p style="margin: 0;">Questions? Bugs? Contact us on our Slack channel: #maas-update</p>
+</div>
     <header role="banner">
       <nav class="navbar navbar-fixed-top navbar-inverse" role="navigation">
         <div class="container tabbed">
@@ -90,7 +94,7 @@
 
     <footer role="contentinfo">
       <div class="container">
-        <span style="color:white;text-transform:none">Not an official Red Hat service. For demonstration purposes only, provided ‘as-is’ without any warranty, support, or SLA. Any use of the service is at your own risk.</span>
+        <span style="color:white;text-transform:none">Not an official Red Hat service. For Red Hat associate internal demo purposes only, provided ‘as-is’ without support or SLA.<br /> The intended purpose is to test connectivity of Red Hat products to models that customers may use. The models are provided for this limited purpose.</span>
         <ul class="list-inline pull-right">
           <li style="color:white;">&copy; {{ today.year }} {{ provider.name }},</li>
           <li><a class="powered-by" href="http://3scale.net/">Powered by 3scale</a></li>

@@ -69,39 +69,59 @@
             {% for api_spec in provider.api_specs %}
               {% if api_spec.service.system_name == application.service.system_name %}
             <span id='endpoint_url' style='padding-right:5px;'>{{ api_spec.api_product_production_public_base_url }}</span><i class="fa fa-lg fa-copy" onclick="copyToClipboard('endpoint_url', 'Endpoint URL')"></i>
+            <p class="help-block"><em>Note: depending on your client or code, you may need to add <code>/v1</code> to this URL.</em></p>
               {% endif %}
             {% endfor %}
           </dd>
-          <dt>Model Name</dt>
-          <dd>
-            	<code id='model_name'>
-              {% case application.service.system_name %}
-              {% when 'granite-8b-code-instruct' %}
-                granite-8b-code-instruct-128k
-              {% when 'granite-3dot2-8b-instruct' %}
-                granite-3dot2-8b-instruct
-              {% when 'mistral-7b-Instruct-v0-3' %}
-                mistral-7b-instruct
-              {% when 'nomic-embed-text-v1-5' %}
-                /mnt/models
-              {% when 'tinyllama' %}
-                tinyllama/tinyllama-1.1b-chat-v1.0
-              {% endcase %}
-				</code>
-            <i class="fa fa-lg fa-copy" onclick="copyToClipboard('model_name', 'Model Name')"></i>
-          </dd>
-            <dt>API Key</dt>
+                      <dt>API Key</dt>
             <dd>
               <input id="key_{{ application.id }}" type="password" readOnly="true" class="api_key_display" value="{{ application.user_key }}" />
                   <i class="fa fa-lg fa-eye-slash" onclick="toggleVisibility('key_{{ application.id }}')"></i>
                   <i class="fa fa-lg fa-copy" onclick="copyToClipboard('key_{{ application.id }}', 'API Key')"></i>
-              <p class="help-block"> Add this as a <code>api_key</code>
-                parameter to your API calls to
-                authenticate.</p>
+              <p class="help-block"><em>Add this as an <code>api_key</code>
+                parameter to your API calls or use it as an Authorization Bearer token.</em></p>
                               {% if application.can.regenerate_user_key? %}
                    {{ 'Regenerate' | update_button: application.update_user_key_url, class: 'btn btn-danger btn-xs' }}
               {% endif %}
-            </dd>        
+            </dd>
+          <dt>Model Name</dt>
+          <dd>
+            	<code id='model_name'>
+              {% case application.service.system_name %}
+                {% when 'granite-8b-code-instruct' %}
+                  granite-8b-code-instruct-128k
+                {% when 'nomic-embed-text-v1-5' %}
+                  /mnt/models
+                {% when 'granite-8b-lab-v1' %}
+                  granite-8b-lab-v1
+                {% when 'deepseek-r1-qwen-14b-w4a16' %}
+                  r1-qwen-14b-w4a16
+                {% when 'granite3-guardian-2b' %}
+                  granite3-guardian-2b
+                {% when 'phi-4' %}
+                  microsoft/phi-4
+                {% when 'qwen25-vl-7b-instruct' %}
+                  RedHatAI/Qwen2.5-VL-7B-Instruct-FP8-Dynamic
+                {% when 'granite-vision-3-2-2b' %}
+                  granite-vision-3-2
+                {% when 'mistral-small-24b-w8a8' %}
+                  mistral-small-24b-w8a8
+                {% when 'llama-4-scout-17b-16e-w4a16' %}
+                  llama-4-scout-17b-16e-w4a16
+                {% when 'llama-3-2-3b' %}
+                  llama-3-2-3b
+                {% when 'granite-3-3-8b-instruct' %}
+                  granite-3-3-8b-instruct
+                {% when 'safety-checker' %}
+                  Not needed
+                {% when 'docling' %}
+                  Not needed
+                {% when 'sdxl' %}
+                  Not needed
+              {% endcase %}
+				</code>
+            <i class="fa fa-lg fa-copy" onclick="copyToClipboard('model_name', 'Model Name')"></i>
+          </dd>        
           {% elsif application.oauth_mode? %}
           <div class='data-container' data-backend="oauth">
             <dt>Client ID</dt>
