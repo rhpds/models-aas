@@ -40,7 +40,7 @@ spec:
                 syncwave: '1'
                 serviceAccount:
                   name: "3scale-status-checker"
-          users: ""
+          users: []
     - repoURL: {{ .Values.threeScale.values.repoURL }}
       targetRevision: {{ .Values.threeScale.values.targetRevision }}
       ref: values
