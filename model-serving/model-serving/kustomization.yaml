@@ -20,7 +20,7 @@ resources:
 - granite32-oci-data-connection.yaml
 - granite32-servingruntime.yaml
 - codellama7b-inferenceservice.yaml
-- docling.yaml
+#- docling.yaml
 - llama-guard-model.yaml
 - nomic-embed-raw.yaml
 - nvidia-gpu-monitoring-dashboard-job.yaml
