@@ -280,7 +280,7 @@ apis:
   - name: codellama-7b
     activeDocOpenAPIRef: https://raw.githubusercontent.com/rhpds/models-aas/refs/heads/main/3scale/api_definitions/granite-3dot2-8b-instruct.json
     backend:
-      privateBaseURL: http://mistral-7b-instruct-predictor.llm-hosting.svc.cluster.local:8080
+      privateBaseURL: http://codellama-7b-predictor.llm-hosting.svc.cluster.local:8000
       path: /
     deployment:
       apicastHosted:
