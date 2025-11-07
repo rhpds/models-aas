@@ -1,45 +1,98 @@
 ---
-apiVersion: serving.kserve.io/v1beta1
-kind: InferenceService
+apiVersion: serving.kserve.io/v1alpha1
+kind: ServingRuntime
 metadata:
-  name: granite-3.1-8b-lab-v1
-  namespace:llm-hosting
   annotations:
-    serving.kserve.io/deploymentMode: RawDeployment
+    argocd.argoproj.io/managed-by: openshift-gitops
+    argocd.argoproj.io/sync-wave: "1"  
+    opendatahub.io/apiProtocol: REST
+    opendatahub.io/recommended-accelerators: '["nvidia.com/gpu"]'
+    opendatahub.io/template-display-name: vLLM ServingRuntime for KServe
+    opendatahub.io/template-name: vllm-runtime
+    openshift.io/display-name: granite-3.1-8b-lab-v1
+  name: granite-3-1-8b-lab-v1-vllm
+  namespace: llm-hosting
+  labels:
+    opendatahub.io/dashboard: 'true'
 spec:
-  predictor:
-    containers:
-    - name: kserve-container
-      image: registry.redhat.io/rhelai1/granite-3.1-8b-lab-v1:1.4  # Direct image reference
+  annotations:
+    prometheus.io/path: /metrics
+    prometheus.io/port: '8080'
+  containers:
+    - args:
+        - '--port=8080'
+        - '--model=/mnt/models'
+        - '--served-model-name={{.Name}}'
+        - '--enable-auto-tool-choice'
+        - '--tool-call-parser'
+        - granite
+        - '--max-model-len'
+        - '8192'
+        - '--tensor-parallel-size'
+        - '1'
       command:
         - python
-        - -m
+        - '-m'
         - vllm.entrypoints.openai.api_server
-      args:
-        - --model
-        - /mnt/models
-        - --host
-        - 0.0.0.0
-        - --port
-        - "8080"
-        - --served-model-name
-        - granite-3.1-8b-lab-v1
-        - --tensor-parallel-size
-        - "1"
-      resources:
-        limits:
-          nvidia.com/gpu: 1
-          cpu: "4"
-          memory: 16Gi
       env:
+        - name: HF_HOME
+          value: /tmp/hf_home
+        - name: VLLM_USE_MODELSCOPE
+          value: "False"
+        - name: TRANSFORMERS_OFFLINE
+          value: "1"
         - name: VLLM_ENGINE_USE_RAY
           value: "0"
+      image: 'quay.io/modh/vllm:rhoai-2.23-cuda'
+      name: kserve-container
       ports:
         - containerPort: 8080
           protocol: TCP
-      imagePullSecrets:
-        - name: redhat-registry-secret
-      tolerations:
+      volumeMounts:
+        - mountPath: /dev/shm
+          name: shm
+  multiModel: false
+  supportedModelFormats:
+    - autoSelect: true
+      name: vLLM
+  volumes:
+    - emptyDir:
+        medium: Memory
+        sizeLimit: 2Gi
+      name: shm
+---
+apiVersion: serving.kserve.io/v1beta1
+kind: InferenceService
+metadata:
+  annotations:
+    openshift.io/display-name: granite-3.1-8b-lab-v1
+    serving.kserve.io/deploymentMode: RawDeployment
+  name: granite-3-1-8b-lab-v1
+  namespace: llm-hosting
+  labels:
+    opendatahub.io/dashboard: 'true'
+spec:
+  predictor:
+    maxReplicas: 1
+    minReplicas: 1
+    model:
+      modelFormat:
+        name: vLLM
+      name: ''
+      resources:
+        limits:
+          cpu: '4'
+          memory: 16Gi
+          nvidia.com/gpu: '1'
+        requests:
+          cpu: '2'
+          memory: 8Gi
+          nvidia.com/gpu: '1'
+      runtime: granite-3-1-8b-lab-v1-vllm
+      storage:
+        key: aws-connection-models
+        path: granite-3.1-8b-lab-v1/
+    tolerations:
       - effect: NoSchedule
         key: nvidia.com/gpu
         value: "L40S-gpu"
