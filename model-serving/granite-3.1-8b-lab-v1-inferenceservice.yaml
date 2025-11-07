@@ -1,0 +1,46 @@
+---
+apiVersion: serving.kserve.io/v1beta1
+kind: InferenceService
+metadata:
+  name: granite-3.1-8b-lab-v1
+  namespace:llm-hosting
+  annotations:
+    serving.kserve.io/deploymentMode: RawDeployment
+spec:
+  predictor:
+    containers:
+    - name: kserve-container
+      image: registry.redhat.io/rhelai1/granite-3.1-8b-lab-v1:1.4  # Direct image reference
+      command:
+        - python
+        - -m
+        - vllm.entrypoints.openai.api_server
+      args:
+        - --model
+        - /mnt/models
+        - --host
+        - 0.0.0.0
+        - --port
+        - "8080"
+        - --served-model-name
+        - granite-3.1-8b-lab-v1
+        - --tensor-parallel-size
+        - "1"
+      resources:
+        limits:
+          nvidia.com/gpu: 1
+          cpu: "4"
+          memory: 16Gi
+      env:
+        - name: VLLM_ENGINE_USE_RAY
+          value: "0"
+      ports:
+        - containerPort: 8080
+          protocol: TCP
+      imagePullSecrets:
+        - name: redhat-registry-secret
+      tolerations:
+      - effect: NoSchedule
+        key: nvidia.com/gpu
+        value: "L40S-gpu"
+        operator: Equal
