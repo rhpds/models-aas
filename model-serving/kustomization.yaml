@@ -20,6 +20,7 @@ resources:
 - granite32-oci-data-connection.yaml
 - granite32-servingruntime.yaml
 - codellama7b-inferenceservice.yaml
+- granite-3.1-8b-lab-v1-inferenceservice.yaml
 #- docling.yaml
 - llama-guard-model.yaml
 - nomic-embed-raw.yaml
