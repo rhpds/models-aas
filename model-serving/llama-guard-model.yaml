@@ -69,6 +69,7 @@ spec:
     model:
       args:
           - '--served-model-name=meta-llama/Llama-Guard-3-1B'
+          - '--enforce-eager'
       modelFormat:
         name: vLLM
       name: ''
