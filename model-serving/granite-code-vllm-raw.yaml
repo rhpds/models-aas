@@ -58,6 +58,7 @@ metadata:
   annotations:
     openshift.io/display-name: Granite-8b-code-instruct-128k
     serving.kserve.io/deploymentMode: RawDeployment
+    serving.kserve.io/revisionHistoryLimit: "1"
   name: granite-8b-code-instruct-128k
   namespace: llm-hosting
   labels:
