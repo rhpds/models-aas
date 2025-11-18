@@ -25,7 +25,6 @@ spec:
         - '--max-model-len'
         - '6048'
         - '--dtype=half'
-        - '--enable-chunked-prefill'
       command:
         - python
         - '-m'
