@@ -89,3 +89,20 @@ spec:
         key: nvidia.com/gpu
         value: "L4-gpu"
         operator: Equal
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: granite-8b-code-instruct-128k-predictor-lb
+  namespace: llm-hosting
+  labels:
+    opendatahub.io/dashboard: 'true'
+spec:
+  type: ClusterIP
+  selector:
+    serving.kserve.io/inferenceservice: granite-8b-code-instruct-128k
+  ports:
+  - name: http
+    port: 8080
+    targetPort: 8080
+    protocol: TCP
