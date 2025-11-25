@@ -16,7 +16,8 @@ spec:
     minReplicas: 1
     model:
       args:
-        - '--max_model_len=4096'    
+        - '--max_model_len=4096'
+        - '--enforce-eager'
       modelFormat:
         name: vLLM
       name: ''
