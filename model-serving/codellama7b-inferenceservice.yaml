@@ -25,10 +25,8 @@ spec:
         - '--served-model-name={{.Name}}'
         - '--enable-auto-tool-choice'
         - '--tool-call-parser=hermes'
-        - '--chat-template'
-        - 'llama2'
-        - '--max-model-len'
-        - '16384'
+        - '--chat-template=llama2'
+        - '--max-model-len=16384'
       command:
         - python
         - '-m'
