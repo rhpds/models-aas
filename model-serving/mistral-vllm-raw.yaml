@@ -18,6 +18,7 @@ spec:
       args:
         - '--max_model_len=4096'
         - '--enforce-eager'
+        - '--chat-template=mistral-instruct'
       modelFormat:
         name: vLLM
       name: ''
