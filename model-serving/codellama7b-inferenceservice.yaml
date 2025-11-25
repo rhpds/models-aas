@@ -25,6 +25,8 @@ spec:
         - '--served-model-name={{.Name}}'
         - '--enable-auto-tool-choice'
         - '--tool-call-parser=hermes'
+        - '--chat-template'
+        - '{%- for message in messages %}{%- if message["role"] == "system" -%}{{- "[INST] <<SYS>>\n" + message["content"] + "\n<</SYS>>\n\n" -}}{%- elif message["role"] == "user" -%}{{- message["content"] + " [/INST] " -}}{%- elif message["role"] == "assistant" -%}{{- message["content"] + " </s><s>[INST] " -}}{%- endif %}{%- endfor %}'
         - '--max-model-len=16384'
       command:
         - python
