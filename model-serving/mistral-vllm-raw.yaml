@@ -18,6 +18,8 @@ spec:
       args:
         - '--max_model_len=4096'
         - '--enforce-eager'
+        - '--enable-auto-tool-choice'
+        - '--chat-template=/mnt/models/tokenizer_config.json'
       modelFormat:
         name: vLLM
       name: ''
