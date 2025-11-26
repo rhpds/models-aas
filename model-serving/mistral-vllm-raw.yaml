@@ -1,57 +1,4 @@
 ---
-apiVersion: serving.kserve.io/v1alpha1
-kind: ServingRuntime
-metadata:
-  annotations:
-    opendatahub.io/apiProtocol: REST
-    opendatahub.io/recommended-accelerators: '["nvidia.com/gpu"]'
-    opendatahub.io/template-display-name: vLLM ServingRuntime for Mistral
-    opendatahub.io/template-name: vllm-runtime
-    openshift.io/display-name: mistral-7b-vllm
-  name: mistral-7b-vllm
-  namespace: llm-hosting
-  labels:
-    opendatahub.io/dashboard: 'true'
-spec:
-  annotations:
-    prometheus.io/path: /metrics
-    prometheus.io/port: '8080'
-  containers:
-    - args:
-        - '--port=8080'
-        - '--model=/mnt/models'
-        - '--served-model-name={{.Name}}'
-        - '--max-model-len=4096'
-        - '--enforce-eager'
-      command:
-        - python
-        - '-m'
-        - vllm.entrypoints.openai.api_server
-      env:
-        - name: HF_HOME
-          value: /tmp/hf_home
-        - name: VLLM_USE_MODELSCOPE
-          value: "False"
-        - name: TRANSFORMERS_OFFLINE
-          value: "1"
-      image: 'quay.io/modh/vllm:rhoai-2.23-cuda'
-      name: kserve-container
-      ports:
-        - containerPort: 8080
-          protocol: TCP
-      volumeMounts:
-        - mountPath: /dev/shm
-          name: shm
-  multiModel: false
-  supportedModelFormats:
-    - autoSelect: true
-      name: vLLM
-  volumes:
-    - emptyDir:
-        medium: Memory
-        sizeLimit: 2Gi
-      name: shm
----
 apiVersion: serving.kserve.io/v1beta1
 kind: InferenceService
 metadata:
@@ -68,6 +15,9 @@ spec:
     maxReplicas: 1
     minReplicas: 1
     model:
+      args:
+        - '--max_model_len=4096'
+        - '--enforce-eager'
       modelFormat:
         name: vLLM
       name: ''
@@ -80,7 +30,7 @@ spec:
           cpu: 200m
           memory: 16Gi
           nvidia.com/gpu: '1'
-      runtime: mistral-7b-vllm
+      runtime: vllm-2.16-6144
       storage:
         key: aws-connection-models
         path: mistralai/Mistral-7B-Instruct-v0.3/
