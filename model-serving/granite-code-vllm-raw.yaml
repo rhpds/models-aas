@@ -25,6 +25,8 @@ spec:
         - --served-model-name={{.Name}}
         - --distributed-executor-backend=mp
         - --max-model-len=6144
+        - --enable-auto-tool-choice
+        - --tool-call-parser=granite
       command:
         - python
         - '-m'
