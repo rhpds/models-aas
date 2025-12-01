@@ -14,7 +14,6 @@ resources:
 - project-manager.yaml
 - secret-aws-connection-llm-hosting.yaml
 - create-odh-tec-workbench.yaml
-- mistral-vllm-raw.yaml
 - granite32-inferenceservice.yaml
 - granite32-oci-data-connection.yaml
 - granite32-servingruntime.yaml
