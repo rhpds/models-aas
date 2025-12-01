@@ -21,6 +21,7 @@ resources:
 - granite32-servingruntime.yaml
 - codellama7b-inferenceservice.yaml
 - codellama7b-instruct-inferenceservice.yaml
+- granite-40-h-tiny-inference.yaml
 #- docling.yaml
 - llama-guard-model.yaml
 - nomic-embed-raw.yaml
