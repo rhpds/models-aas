@@ -22,7 +22,7 @@ spec:
     - args:
         - --model-id=$(MODEL_ID)
         - --port=8080
-        - --max-input-length=524288
+        - --max-input-length=400000
         - --max-total-tokens=524288
         - --max-batch-prefill-tokens=65536
         - --max-concurrent-requests=128
