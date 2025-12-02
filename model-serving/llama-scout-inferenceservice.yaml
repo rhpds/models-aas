@@ -85,7 +85,7 @@ spec:
       runtime: llama-scout-vllm
       storage:
         key: aws-connection-models
-        path: llama-scout/Llama-4-Scout-17B-16E-Instruct/
+        path: meta-llama/Llama-4-Scout-17B-16E-Instruct/
     tolerations:
       - effect: NoSchedule
         key: nvidia.com/gpu
