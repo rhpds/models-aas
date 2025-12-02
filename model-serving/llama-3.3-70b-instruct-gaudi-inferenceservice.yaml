@@ -30,13 +30,13 @@ spec:
         - text-generation-launcher
       env:
         - name: MODEL_ID
-          value: RedHatAI/Llama-3.3-70B-Instruct-quantized.w8a8
+          value: meta-llama/Llama-3.3-70B-Instruct
         - name: NUM_SHARD
-          value: "1"
+          value: "2"
         - name: ENABLE_TOOLS
           value: "true"
         - name: HABANA_VISIBLE_DEVICES
-          value: "0"
+          value: "0,1"
         - name: ENABLE_HPU_GRAPH
           value: "true"
         - name: PT_HPU_LAZY_MODE
@@ -97,13 +97,13 @@ spec:
       name: ''
       resources:
         limits:
-          cpu: '16'
-          memory: 96Gi
-          habana.ai/gaudi: '1'
+          cpu: '32'
+          memory: 128Gi
+          habana.ai/gaudi: '2'
         requests:
-          cpu: '8'
-          memory: 48Gi
-          habana.ai/gaudi: '1'
+          cpu: '16'
+          memory: 64Gi
+          habana.ai/gaudi: '2'
       runtime: llama-3-3-70b-tgi-gaudi
     tolerations:
       - effect: NoSchedule
