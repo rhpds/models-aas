@@ -24,7 +24,7 @@ spec:
         - --port=8080
         - --max-input-length=400000
         - --max-total-tokens=524288
-        - --max-batch-prefill-tokens=65536
+        - --max-batch-prefill-tokens=400000
         - --max-concurrent-requests=128
       command:
         - text-generation-launcher
