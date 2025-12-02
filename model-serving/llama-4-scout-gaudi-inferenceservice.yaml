@@ -31,6 +31,8 @@ spec:
       env:
         - name: MODEL_ID
           value: meta-llama/Llama-4-Scout-17B-16E-Instruct
+        - name: MODEL_TYPE
+          value: llama
         - name: NUM_SHARD
           value: "4"
         - name: ENABLE_VISION
