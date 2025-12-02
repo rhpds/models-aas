@@ -89,5 +89,5 @@ spec:
     tolerations:
       - effect: NoSchedule
         key: nvidia.com/gpu
-        value: "L40S-gpu"
+        value: "L4-gpu"
         operator: Equal
