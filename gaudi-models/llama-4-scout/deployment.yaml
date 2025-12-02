@@ -1,0 +1,140 @@
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: llama-4-scout-models
+  namespace: llm-hosting
+spec:
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: lvms-vg1
+  resources:
+    requests:
+      storage: 250Gi
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: llama-4-scout-tgi
+  namespace: llm-hosting
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: llama-4-scout
+  template:
+    metadata:
+      labels:
+        app: llama-4-scout
+    spec:
+      containers:
+      - name: tgi-gaudi
+        image: ghcr.io/huggingface/tgi-gaudi:latest
+        env:
+        - name: MODEL_ID
+          value: "meta-llama/Llama-4-Scout-17B-16E-Instruct"
+        - name: NUM_SHARD
+          value: "4"
+        - name: MAX_INPUT_LENGTH
+          value: "524288"
+        - name: MAX_TOTAL_TOKENS
+          value: "524288"
+        - name: MAX_BATCH_PREFILL_TOKENS
+          value: "65536"
+        - name: MAX_CONCURRENT_REQUESTS
+          value: "128"
+        - name: ENABLE_VISION
+          value: "true"
+        - name: MAX_INPUT_IMAGES
+          value: "5"
+        - name: ENABLE_TOOLS
+          value: "true"
+        - name: HUGGING_FACE_HUB_TOKEN
+          valueFrom:
+            secretKeyRef:
+              name: hf-token
+              key: token
+        - name: HABANA_VISIBLE_DEVICES
+          value: "all"
+        - name: ENABLE_HPU_GRAPH
+          value: "true"
+        - name: PT_HPU_LAZY_MODE
+          value: "1"
+
+        ports:
+        - containerPort: 8080
+          name: http
+
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: 8080
+          initialDelaySeconds: 300
+          periodSeconds: 15
+          timeoutSeconds: 10
+          failureThreshold: 5
+
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 8080
+          initialDelaySeconds: 400
+          periodSeconds: 30
+          timeoutSeconds: 10
+
+        resources:
+          requests:
+            habana.ai/gaudi: 4
+            memory: 128Gi
+            cpu: 32
+          limits:
+            habana.ai/gaudi: 4
+            memory: 128Gi
+
+        volumeMounts:
+        - name: model-cache
+          mountPath: /data
+        - name: shm
+          mountPath: /dev/shm
+
+      volumes:
+      - name: model-cache
+        persistentVolumeClaim:
+          claimName: llama-4-scout-models
+      - name: shm
+        emptyDir:
+          medium: Memory
+          sizeLimit: 32Gi
+
+      nodeSelector:
+        accelerator: gaudi
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: llama-4-scout
+  namespace: llm-hosting
+spec:
+  selector:
+    app: llama-4-scout
+  ports:
+  - port: 8080
+    targetPort: 8080
+    name: http
+
+---
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  name: llama-4-scout
+  namespace: llm-hosting
+spec:
+  to:
+    kind: Service
+    name: llama-4-scout
+  port:
+    targetPort: http
+  tls:
+    termination: edge
