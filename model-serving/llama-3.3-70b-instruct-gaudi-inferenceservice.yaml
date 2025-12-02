@@ -1,0 +1,114 @@
+---
+apiVersion: serving.kserve.io/v1alpha1
+kind: ServingRuntime
+metadata:
+  annotations:
+    argocd.argoproj.io/managed-by: openshift-gitops
+    argocd.argoproj.io/sync-wave: "1"
+    opendatahub.io/apiProtocol: REST
+    opendatahub.io/recommended-accelerators: '["habana.ai/gaudi"]'
+    openshift.io/display-name: "TGI-Gaudi Runtime for Llama 3.3 70B"
+    opendatahub.io/template-display-name: "TGI-Gaudi Runtime"
+    opendatahub.io/template-name: tgi-gaudi-runtime
+  name: llama-3-3-70b-tgi-gaudi
+  namespace: llm-hosting
+  labels:
+    opendatahub.io/dashboard: 'true'
+spec:
+  annotations:
+    prometheus.io/path: /metrics
+    prometheus.io/port: '8080'
+  containers:
+    - args:
+        - --model-id=$(MODEL_ID)
+        - --port=8080
+        - --max-input-length=120000
+        - --max-total-tokens=131072
+        - --max-batch-prefill-tokens=120000
+        - --max-concurrent-requests=128
+      command:
+        - text-generation-launcher
+      env:
+        - name: MODEL_ID
+          value: rh-llama-3.3-70B-instruct-quantized
+        - name: NUM_SHARD
+          value: "4"
+        - name: ENABLE_TOOLS
+          value: "true"
+        - name: HABANA_VISIBLE_DEVICES
+          value: all
+        - name: ENABLE_HPU_GRAPH
+          value: "true"
+        - name: PT_HPU_LAZY_MODE
+          value: "1"
+        - name: NUMBA_CACHE_DIR
+          value: /tmp/numba_cache
+        - name: HUGGING_FACE_HUB_TOKEN
+          valueFrom:
+            secretKeyRef:
+              name: hf-token
+              key: token
+      image: 'ghcr.io/huggingface/tgi-gaudi:latest'
+      name: kserve-container
+      ports:
+        - containerPort: 8080
+          protocol: TCP
+      volumeMounts:
+        - mountPath: /dev/shm
+          name: shm
+        - mountPath: /data
+          name: model-cache
+        - mountPath: /var/log/habana_logs
+          name: habana-logs
+  multiModel: false
+  supportedModelFormats:
+    - autoSelect: true
+      name: HuggingFace
+  volumes:
+    - emptyDir:
+        medium: Memory
+        sizeLimit: 32Gi
+      name: shm
+    - emptyDir:
+        sizeLimit: 250Gi
+      name: model-cache
+    - emptyDir:
+        sizeLimit: 10Gi
+      name: habana-logs
+---
+apiVersion: serving.kserve.io/v1beta1
+kind: InferenceService
+metadata:
+  annotations:
+    openshift.io/display-name: Llama-3.3-70B-Instruct-Gaudi
+    serving.kserve.io/deploymentMode: RawDeployment
+    serving.kserve.io/revisionHistoryLimit: "1"
+  name: llama-3-3-70b-gaudi
+  namespace: llm-hosting
+  labels:
+    opendatahub.io/dashboard: 'true'
+spec:
+  predictor:
+    maxReplicas: 1
+    minReplicas: 1
+    model:
+      modelFormat:
+        name: HuggingFace
+      name: ''
+      resources:
+        limits:
+          cpu: '32'
+          memory: 128Gi
+          habana.ai/gaudi: '4'
+        requests:
+          cpu: '16'
+          memory: 64Gi
+          habana.ai/gaudi: '4'
+      runtime: llama-3-3-70b-tgi-gaudi
+    tolerations:
+      - effect: NoSchedule
+        key: habana.ai/gaudi
+        operator: Exists
+    nodeSelector:
+      accelerator: gaudi
+---
