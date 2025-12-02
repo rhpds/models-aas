@@ -60,6 +60,8 @@ spec:
           name: shm
         - mountPath: /data
           name: model-cache
+        - mountPath: /var/log/habana_logs
+          name: habana-logs
   multiModel: false
   supportedModelFormats:
     - autoSelect: true
@@ -72,6 +74,9 @@ spec:
     - emptyDir:
         sizeLimit: 250Gi
       name: model-cache
+    - emptyDir:
+        sizeLimit: 10Gi
+      name: habana-logs
 ---
 apiVersion: serving.kserve.io/v1beta1
 kind: InferenceService
