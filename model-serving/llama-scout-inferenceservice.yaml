@@ -1,0 +1,94 @@
+---
+apiVersion: serving.kserve.io/v1alpha1
+kind: ServingRuntime
+metadata:
+  annotations:
+    argocd.argoproj.io/managed-by: openshift-gitops
+    argocd.argoproj.io/sync-wave: "1"
+    opendatahub.io/apiProtocol: REST
+    opendatahub.io/recommended-accelerators: '["nvidia.com/gpu"]'
+    opendatahub.io/template-display-name: vLLM ServingRuntime for KServe
+    opendatahub.io/template-name: vllm-runtime
+    openshift.io/display-name: llama-scout-vllm
+  name: llama-scout-vllm
+  namespace: llm-hosting
+  labels:
+    opendatahub.io/dashboard: 'true'
+spec:
+  annotations:
+    prometheus.io/path: /metrics
+    prometheus.io/port: '8080'
+  containers:
+    - args:
+        - '--port=8080'
+        - '--model=/mnt/models'
+        - '--served-model-name={{.Name}}'
+        - '--enable-auto-tool-choice'
+        - '--tool-call-parser=hermes'
+        - '--max-model-len=131072'
+        - '--tensor-parallel-size=4'
+      command:
+        - python
+        - '-m'
+        - vllm.entrypoints.openai.api_server
+      env:
+        - name: HF_HOME
+          value: /tmp/hf_home
+        - name: VLLM_USE_MODELSCOPE
+          value: "False"
+        - name: TRANSFORMERS_OFFLINE
+          value: "1"
+      image: 'quay.io/modh/vllm:rhoai-2.23-cuda'
+      name: kserve-container
+      ports:
+        - containerPort: 8080
+          protocol: TCP
+      volumeMounts:
+        - mountPath: /dev/shm
+          name: shm
+  multiModel: false
+  supportedModelFormats:
+    - autoSelect: true
+      name: vLLM
+  volumes:
+    - emptyDir:
+        medium: Memory
+        sizeLimit: 8Gi
+      name: shm
+---
+apiVersion: serving.kserve.io/v1beta1
+kind: InferenceService
+metadata:
+  annotations:
+    openshift.io/display-name: llama-scout-17b
+    serving.kserve.io/deploymentMode: RawDeployment
+  name: llama-scout-17b
+  namespace: llm-hosting
+  labels:
+    opendatahub.io/dashboard: 'true'
+spec:
+  predictor:
+    maxReplicas: 1
+    minReplicas: 1
+    model:
+      modelFormat:
+        name: vLLM
+      name: ''
+      resources:
+        limits:
+          cpu: '16'
+          memory: 96Gi
+          nvidia.com/gpu: '4'
+        requests:
+          cpu: '8'
+          memory: 48Gi
+          nvidia.com/gpu: '4'
+      runtime: llama-scout-vllm
+      storage:
+        key: aws-connection-models
+        path: llama-scout/Llama-4-Scout-17B-16E-Instruct/
+    tolerations:
+      - effect: NoSchedule
+        key: nvidia.com/gpu
+        value: "L4-gpu"
+        operator: Equal
