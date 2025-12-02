@@ -45,6 +45,8 @@ spec:
           value: "true"
         - name: PT_HPU_LAZY_MODE
           value: "1"
+        - name: NUMBA_CACHE_DIR
+          value: /tmp/numba_cache
         - name: HUGGING_FACE_HUB_TOKEN
           valueFrom:
             secretKeyRef:
