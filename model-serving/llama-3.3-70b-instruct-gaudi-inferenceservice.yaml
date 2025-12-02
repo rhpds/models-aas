@@ -30,7 +30,7 @@ spec:
         - text-generation-launcher
       env:
         - name: MODEL_ID
-          value: meta-llama/Llama-3.3-70B-Instruct
+          value: RedHatAI/Llama-3.3-70B-Instruct-quantized.w8a8
         - name: NUM_SHARD
           value: "4"
         - name: ENABLE_TOOLS
