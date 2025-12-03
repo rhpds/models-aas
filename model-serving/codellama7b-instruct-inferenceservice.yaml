@@ -1,5 +1,5 @@
 ---
-apiVersion: serving.kserve.io/v1beta1
+apiVersion: serving.kserve.io/v1alpha1
 kind: ServingRuntime
 metadata:
   annotations:
