@@ -29,6 +29,8 @@ spec:
         - '--max-model-len=131072'
         - '--tensor-parallel-size=4'
         - '--enforce-eager'
+        - '--quantization=awq'
+        - '--gpu-memory-utilization=0.95'
       command:
         - python
         - '-m'
