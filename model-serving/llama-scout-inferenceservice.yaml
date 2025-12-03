@@ -86,8 +86,6 @@ spec:
       storage:
         key: aws-connection-models
         path: meta-llama/Llama-4-Scout-17B-16E-Instruct/
-    nodeSelector:
-      beta.kubernetes.io/instance-type: g6e.12xlarge
     tolerations:
       - effect: NoSchedule
         key: nvidia.com/gpu
