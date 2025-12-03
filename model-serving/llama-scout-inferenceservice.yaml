@@ -88,6 +88,7 @@ spec:
         path: meta-llama/Llama-4-Scout-17B-16E-Instruct/
     nodeSelector:
       beta.kubernetes.io/instance-type: g6e.12xlarge
+      kubernetes.io/hostname: ip-10-0-58-238.us-west-2.compute.internal
     tolerations:
       - effect: NoSchedule
         key: nvidia.com/gpu
