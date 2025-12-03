@@ -25,6 +25,7 @@ spec:
         - '--served-model-name={{.Name}}'
         - '--tool-call-parser=llama3_json'
         - '--enable-auto-tool-choice'
+        - '--distributed-executor-backend=mp'
         - '--max-model-len=131072'
         - '--tensor-parallel-size=4'
         - '--enforce-eager'
