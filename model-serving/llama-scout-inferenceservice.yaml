@@ -78,11 +78,11 @@ spec:
       resources:
         limits:
           cpu: '44'
-          memory: 360Gi
+          memory: 160Gi
           nvidia.com/gpu: '4'
         requests:
           cpu: '32'
-          memory: 300Gi
+          memory: 128Gi
           nvidia.com/gpu: '4'
       runtime: llama-scout-vllm
       storage:
