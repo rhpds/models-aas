@@ -93,7 +93,7 @@ spec:
       runtime: codellama7b-instruct-vllm
       storage:
         key: aws-connection-models
-        path: codellama/codellama-7b-instruct-hf
+        path: codellama/CodeLlama-7b-Instruct-hf/
     nodeSelector:
       beta.kubernetes.io/instance-type: g6e.2xlarge
     tolerations:
