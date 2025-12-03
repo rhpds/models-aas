@@ -23,6 +23,7 @@ spec:
         - '--port=8080'
         - '--model=/mnt/models'
         - '--served-model-name={{.Name}}'
+        - '--tool-call-parser=llama3_json'
         - '--enable-auto-tool-choice'
         - '--max-model-len=131072'
         - '--tensor-parallel-size=4'
