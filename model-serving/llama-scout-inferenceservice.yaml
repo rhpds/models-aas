@@ -27,6 +27,7 @@ spec:
         - '--enable-auto-tool-choice'
         - '--max-model-len=131072'
         - '--tensor-parallel-size=4'
+        - '--enforce-eager'
       command:
         - python
         - '-m'
@@ -38,7 +39,7 @@ spec:
           value: "False"
         - name: TRANSFORMERS_OFFLINE
           value: "1"
-      image: 'registry.redhat.io/rhaiis/vllm-cuda-rhel9:3.2.4'
+      image: 'quay.io/modh/vllm:rhoai-2.23-cuda'
       name: kserve-container
       ports:
         - containerPort: 8080
@@ -53,7 +54,7 @@ spec:
   volumes:
     - emptyDir:
         medium: Memory
-        sizeLimit: 8Gi
+        sizeLimit: 16Gi
       name: shm
 ---
 apiVersion: serving.kserve.io/v1beta1
