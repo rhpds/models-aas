@@ -26,8 +26,6 @@ spec:
         - '--tensor-parallel-size=4'
         - '--max-model-len=400000'
         - '--enable-auto-tool-choice'
-        - '--tool-call-parser'
-        - 'llama4_pythonic'
       command:
         - python
         - '-m'
