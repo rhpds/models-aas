@@ -21,6 +21,7 @@ resources:
 - codellama7b-instruct-inferenceservice.yaml
 - granite-40-h-tiny-inference.yaml
 - llama-scout-inferenceservice.yaml
+- llama-3.2-1b-fp8-inferenceservice.yaml
 #- docling.yaml
 - llama-guard-model.yaml
 - nomic-embed-raw.yaml
