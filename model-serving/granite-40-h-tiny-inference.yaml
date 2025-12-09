@@ -9,8 +9,8 @@ metadata:
     opendatahub.io/recommended-accelerators: '["nvidia.com/gpu"]'
     openshift.io/display-name: "vLLM-RHOAI 2.24-max-len: 6144-granite40"
     opendatahub.io/template-display-name: "vLLM-RHOAI 2.24-max-len: 6144-granite40"
-    opendatahub.io/template-name: vllm-2.24-6144-granite40
-  name: vllm-2.24-6144-granite40
+    opendatahub.io/template-name: vllm-224-6144-granite40
+  name: vllm-224-6144-granite40
   namespace: llm-hosting
   labels:
     opendatahub.io/dashboard: 'true'
@@ -82,7 +82,7 @@ spec:
           cpu: '4'
           memory: 16Gi
           nvidia.com/gpu: '1'
-      runtime: vllm-2.24-6144-granite40
+      runtime: vllm-224-6144-granite40
       storage:
         key: aws-connection-models
         path: ibm-granite/granite-4.0-h-tiny/
