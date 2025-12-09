@@ -87,10 +87,10 @@ spec:
         key: aws-connection-models
         path: ibm-granite/granite-4.0-h-tiny/
     nodeSelector:
-      beta.kubernetes.io/instance-type: g6e.2xlarge
+      beta.kubernetes.io/instance-type: g6.2xlarge
     tolerations:
       - effect: NoSchedule
         key: nvidia.com/gpu
-        value: "L40S-gpu"
+        value: "L4-gpu"
         operator: Equal
 ---
