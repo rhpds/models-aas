@@ -19,3 +19,8 @@ spec:
     server: https://kubernetes.default.svc
   syncPolicy:
     automated: {}
+  ignoreDifferences:
+  - group: apps
+    kind: Deployment
+    jsonPointers:
+    - /metadata/annotations/argocd.argoproj.io~1tracking-id
