@@ -28,7 +28,7 @@ spec:
         - --gpu-memory-utilization=0.5
         - --trust-remote-code
       command:
-        - python
+        - python3
         - '-m'
         - vllm.entrypoints.openai.api_server
       env:
