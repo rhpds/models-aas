@@ -23,4 +23,5 @@ resources:
 #- docling.yaml
 - llama-guard-model.yaml
 - nomic-embed-raw.yaml
+- granite-docling-inference.yaml
 - nvidia-gpu-monitoring-dashboard-job.yaml
