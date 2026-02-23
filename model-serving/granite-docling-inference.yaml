@@ -85,7 +85,7 @@ spec:
         key: aws-connection-models
         path: ibm-granite/granite-docling-258M/
     nodeSelector:
-      beta.kubernetes.io/instance-type: g6e.xlarge
+      beta.kubernetes.io/instance-type: g6e.2xlarge
     tolerations:
       - effect: NoSchedule
         key: nvidia.com/gpu
