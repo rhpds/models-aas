@@ -7,37 +7,27 @@ metadata:
     argocd.argoproj.io/sync-wave: "1"
     opendatahub.io/apiProtocol: REST
     opendatahub.io/recommended-accelerators: '["nvidia.com/gpu"]'
-    openshift.io/display-name: "vLLM Latest - Granite Docling"
-    opendatahub.io/template-display-name: "vLLM Latest - Granite Docling"
-    opendatahub.io/template-name: vllm-latest-docling
-  name: vllm-latest-docling
+    opendatahub.io/template-display-name: Docling Serve ServingRuntime for KServe
+    opendatahub.io/template-name: docling-serve-runtime
+    openshift.io/display-name: docling-serve
+  name: docling-serve-v0.7.0
   namespace: llm-hosting
   labels:
     opendatahub.io/dashboard: 'true'
 spec:
   annotations:
     prometheus.io/path: /metrics
-    prometheus.io/port: '8080'
+    prometheus.io/port: '5001'
   containers:
-    - args:
-        - --port=8080
-        - --model=/mnt/models
-        - --served-model-name={{.Name}}
-        - --max-model-len=4096
-        - --enforce-eager
-        - --gpu-memory-utilization=0.5
-        - --trust-remote-code
-      command:
-        - python3
-        - '-m'
-        - vllm.entrypoints.openai.api_server
-      env:
-        - name: HF_HOME
-          value: /tmp/hf_home
-      image: 'vllm/vllm-openai:latest'
+    - image: 'quay.io/docling-project/docling-serve-cu124:v0.7.0'
       name: kserve-container
+      command:
+        - python
+        - '-m'
+        - docling_serve
+        - run
       ports:
-        - containerPort: 8080
+        - containerPort: 5001
           protocol: TCP
       volumeMounts:
         - mountPath: /dev/shm
@@ -45,7 +35,7 @@ spec:
   multiModel: false
   supportedModelFormats:
     - autoSelect: true
-      name: vLLM
+      name: Docling
   volumes:
     - emptyDir:
         medium: Memory
@@ -69,7 +59,7 @@ spec:
     minReplicas: 1
     model:
       modelFormat:
-        name: vLLM
+        name: Docling
       name: ''
       resources:
         limits:
@@ -80,7 +70,7 @@ spec:
           cpu: '2'
           memory: 4Gi
           nvidia.com/gpu: '1'
-      runtime: vllm-latest-docling
+      runtime: docling-serve-v0.7.0
       storage:
         key: aws-connection-models
         path: ibm-granite/granite-docling-258M/
