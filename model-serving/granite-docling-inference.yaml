@@ -34,7 +34,7 @@ spec:
       env:
         - name: HF_HOME
           value: /tmp/hf_home
-      image: 'quay.io/modh/vllm:latest'
+      image: 'vllm/vllm-openai:latest'
       name: kserve-container
       ports:
         - containerPort: 8080
