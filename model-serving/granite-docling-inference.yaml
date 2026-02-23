@@ -7,34 +7,37 @@ metadata:
     argocd.argoproj.io/sync-wave: "1"
     opendatahub.io/apiProtocol: REST
     opendatahub.io/recommended-accelerators: '["nvidia.com/gpu"]'
-    openshift.io/display-name: "HuggingFace TGI - Granite Docling"
-    opendatahub.io/template-display-name: "HuggingFace TGI - Granite Docling"
-    opendatahub.io/template-name: tgi-granite-docling
-  name: tgi-granite-docling
+    openshift.io/display-name: "vLLM Latest - Granite Docling"
+    opendatahub.io/template-display-name: "vLLM Latest - Granite Docling"
+    opendatahub.io/template-name: vllm-latest-docling
+  name: vllm-latest-docling
   namespace: llm-hosting
   labels:
     opendatahub.io/dashboard: 'true'
 spec:
   annotations:
     prometheus.io/path: /metrics
-    prometheus.io/port: '3000'
+    prometheus.io/port: '8080'
   containers:
     - args:
-        - --model-id=/mnt/models
-        - --port=3000
+        - --port=8080
+        - --model=/mnt/models
+        - --served-model-name={{.Name}}
+        - --max-model-len=4096
+        - --enforce-eager
+        - --gpu-memory-utilization=0.5
+        - --trust-remote-code
+      command:
+        - python
+        - '-m'
+        - vllm.entrypoints.openai.api_server
       env:
-        - name: HF_HUB_CACHE
-          value: /tmp
-        - name: TRANSFORMERS_CACHE
-          value: /tmp
-        - name: NUMBA_CACHE_DIR
-          value: /tmp
-        - name: NUMBA_DISABLE_JIT
-          value: "1"
-      image: 'ghcr.io/huggingface/text-generation-inference:1.4'
+        - name: HF_HOME
+          value: /tmp/hf_home
+      image: 'quay.io/modh/vllm:latest'
       name: kserve-container
       ports:
-        - containerPort: 3000
+        - containerPort: 8080
           protocol: TCP
       volumeMounts:
         - mountPath: /dev/shm
@@ -42,7 +45,7 @@ spec:
   multiModel: false
   supportedModelFormats:
     - autoSelect: true
-      name: pytorch
+      name: vLLM
   volumes:
     - emptyDir:
         medium: Memory
@@ -66,7 +69,7 @@ spec:
     minReplicas: 1
     model:
       modelFormat:
-        name: pytorch
+        name: vLLM
       name: ''
       resources:
         limits:
@@ -77,7 +80,7 @@ spec:
           cpu: '2'
           memory: 4Gi
           nvidia.com/gpu: '1'
-      runtime: tgi-granite-docling
+      runtime: vllm-latest-docling
       storage:
         key: aws-connection-models
         path: ibm-granite/granite-docling-258M/
