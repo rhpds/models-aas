@@ -27,7 +27,11 @@ spec:
           value: /tmp
         - name: TRANSFORMERS_CACHE
           value: /tmp
-      image: 'ghcr.io/huggingface/text-generation-inference:2.0'
+        - name: NUMBA_CACHE_DIR
+          value: /tmp
+        - name: NUMBA_DISABLE_JIT
+          value: "1"
+      image: 'ghcr.io/huggingface/text-generation-inference:1.4'
       name: kserve-container
       ports:
         - containerPort: 3000
