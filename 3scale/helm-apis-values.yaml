@@ -831,7 +831,7 @@ apis:
         published: "true"        
   # - name: other
   #   activeDocOpenAPIRef: https://unknown/openapi.json
-  - name: Granite-Docling-258M
+  - name: granite-docling-258m
     activeDocOpenAPIRef: https://raw.githubusercontent.com/rhpds/models-aas/refs/heads/main/3scale/api_definitions/granite-3dot2-8b-instruct.json
     backend:
       privateBaseURL: http://granite-docling-258m-predictor.llm-hosting.svc.cluster.local:8080
