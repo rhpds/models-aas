@@ -10,7 +10,7 @@ metadata:
     opendatahub.io/template-display-name: Docling Serve ServingRuntime for KServe
     opendatahub.io/template-name: docling-serve-runtime
     openshift.io/display-name: docling-serve
-  name: docling-serve-v0.7.0
+  name: docling-serve-v1.14.3
   namespace: llm-hosting
   labels:
     opendatahub.io/dashboard: 'true'
@@ -19,7 +19,7 @@ spec:
     prometheus.io/path: /metrics
     prometheus.io/port: '5001'
   containers:
-    - image: 'quay.io/docling-project/docling-serve-cu124:v0.7.0'
+    - image: 'quay.io/docling-project/docling-serve-cu128:v1.14.3'
       name: kserve-container
       command:
         - python
@@ -70,12 +70,12 @@ spec:
           cpu: '2'
           memory: 4Gi
           nvidia.com/gpu: '1'
-      runtime: docling-serve-v0.7.0
+      runtime: docling-serve-v1.14.3
       storage:
         key: aws-connection-models
         path: ibm-granite/granite-docling-258M/
     nodeSelector:
-      beta.kubernetes.io/instance-type: g6.2xlarge
+      node.kubernetes.io/instance-type: g6.2xlarge
     tolerations:
       - effect: NoSchedule
         key: nvidia.com/gpu
