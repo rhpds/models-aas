@@ -11,7 +11,7 @@ metadata:
 spec:
   predictor:
     maxReplicas: 2
-    minReplicas: 2
+    minReplicas: 1
     model:
       modelFormat:
         name: vLLM
