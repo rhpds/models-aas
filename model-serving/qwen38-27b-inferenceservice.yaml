@@ -9,8 +9,8 @@ metadata:
     opendatahub.io/recommended-accelerators: '["nvidia.com/gpu"]'
     opendatahub.io/template-display-name: vLLM ServingRuntime for KServe
     opendatahub.io/template-name: vllm-runtime
-    openshift.io/display-name: llama-scout-vllm
-  name: llama-scout-vllm
+    openshift.io/display-name: qwen38-27b-vllm
+  name: qwen38-27b-vllm
   namespace: llm-hosting
   labels:
     opendatahub.io/dashboard: 'true'
@@ -23,13 +23,11 @@ spec:
         - '--port=8080'
         - '--model=/mnt/models'
         - '--served-model-name={{.Name}}'
-        - '--tensor-parallel-size=4'
-        - '--max-model-len=400000'
+        - '--tensor-parallel-size=2'
+        - '--max-model-len=131072'
         - '--enable-auto-tool-choice'
         - '--tool-call-parser'
-        - 'llama4_pythonic'
-        - '--chat-template'
-        - '/app/data/template/tool_chat_template_llama4_pythonic.jinja'
+        - 'hermes'
       command:
         - python
         - '-m'
@@ -41,7 +39,7 @@ spec:
           value: "False"
         - name: TRANSFORMERS_OFFLINE
           value: "1"
-      image: 'quay.io/modh/vllm:rhoai-2.23-cuda'
+      image: 'quay.io/modh/vllm:rhoai-2.24-cuda'
       name: kserve-container
       ports:
         - containerPort: 8080
@@ -63,9 +61,9 @@ apiVersion: serving.kserve.io/v1beta1
 kind: InferenceService
 metadata:
   annotations:
-    openshift.io/display-name: Llama-4-Scout-17B-16E-W4A16
+    openshift.io/display-name: Qwen3.8-27B-BF16
     serving.kserve.io/deploymentMode: RawDeployment
-  name: llama-scout-17b
+  name: qwen38-27b
   namespace: llm-hosting
   labels:
     opendatahub.io/dashboard: 'true'
@@ -81,15 +79,15 @@ spec:
         limits:
           cpu: '44'
           memory: 160Gi
-          nvidia.com/gpu: '4'
+          nvidia.com/gpu: '2'
         requests:
-          cpu: '32'
-          memory: 128Gi
-          nvidia.com/gpu: '4'
-      runtime: llama-scout-vllm
+          cpu: '16'
+          memory: 64Gi
+          nvidia.com/gpu: '2'
+      runtime: qwen38-27b-vllm
       storage:
         key: aws-connection-models
-        path: RedHatAI/Llama-4-Scout-17B-16E-Instruct-quantized.w4a16/
+        path: Qwen/Qwen3.8-27B/
     tolerations:
       - effect: NoSchedule
         key: nvidia.com/gpu
