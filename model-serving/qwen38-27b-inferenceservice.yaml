@@ -38,6 +38,10 @@ spec:
           value: "False"
         - name: TRANSFORMERS_OFFLINE
           value: "1"
+        - name: TRITON_CACHE_DIR
+          value: /tmp/triton_cache
+        - name: HOME
+          value: /tmp
       image: 'vllm/vllm-openai:latest'
       name: kserve-container
       ports:
