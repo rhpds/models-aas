@@ -39,7 +39,7 @@ spec:
           value: "False"
         - name: TRANSFORMERS_OFFLINE
           value: "1"
-      image: 'quay.io/modh/vllm:rhoai-2.24-cuda'
+      image: 'quay.io/modh/vllm:rhoai-2.25-cuda'
       name: kserve-container
       ports:
         - containerPort: 8080
