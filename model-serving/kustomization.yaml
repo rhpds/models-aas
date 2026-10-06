@@ -25,4 +25,5 @@ resources:
 - nomic-embed-raw.yaml
 - granite-docling-inference.yaml
 - qwen38-27b-inferenceservice.yaml
+- granite-guardian-3.1-8b-inferenceservice.yaml
 - nvidia-gpu-monitoring-dashboard-job.yaml
