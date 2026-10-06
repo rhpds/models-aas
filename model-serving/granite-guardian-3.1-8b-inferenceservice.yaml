@@ -1,0 +1,95 @@
+---
+apiVersion: serving.kserve.io/v1alpha1
+kind: ServingRuntime
+metadata:
+  annotations:
+    argocd.argoproj.io/managed-by: openshift-gitops
+    argocd.argoproj.io/sync-wave: "1"
+    opendatahub.io/apiProtocol: REST
+    opendatahub.io/recommended-accelerators: '["nvidia.com/gpu"]'
+    opendatahub.io/template-display-name: vLLM ServingRuntime for KServe
+    opendatahub.io/template-name: vllm-runtime
+    openshift.io/display-name: granite-guardian-3.1-8b-vllm
+  name: granite-guardian-3.1-8b-vllm
+  namespace: llm-hosting
+  labels:
+    opendatahub.io/dashboard: 'true'
+spec:
+  annotations:
+    prometheus.io/path: /metrics
+    prometheus.io/port: '8080'
+  containers:
+    - args:
+        - 'serve'
+        - '/mnt/models'
+        - '--port=8080'
+        - '--served-model-name={{.Name}}'
+        - '--max-model-len=8192'
+        - '--dtype=half'
+      command:
+        - vllm
+      env:
+        - name: HF_HOME
+          value: /tmp/hf_home
+        - name: VLLM_USE_MODELSCOPE
+          value: "False"
+        - name: TRANSFORMERS_OFFLINE
+          value: "1"
+        - name: TRITON_CACHE_DIR
+          value: /tmp/triton_cache
+        - name: HOME
+          value: /tmp
+      image: 'vllm/vllm-openai:latest'
+      name: kserve-container
+      ports:
+        - containerPort: 8080
+          protocol: TCP
+      volumeMounts:
+        - mountPath: /dev/shm
+          name: shm
+  multiModel: false
+  supportedModelFormats:
+    - autoSelect: true
+      name: vLLM
+  volumes:
+    - emptyDir:
+        medium: Memory
+        sizeLimit: 2Gi
+      name: shm
+---
+apiVersion: serving.kserve.io/v1beta1
+kind: InferenceService
+metadata:
+  annotations:
+    openshift.io/display-name: Granite-Guardian-3.1-8B
+    serving.kserve.io/deploymentMode: RawDeployment
+  name: granite-guardian-3-1-8b
+  namespace: llm-hosting
+  labels:
+    opendatahub.io/dashboard: 'true'
+spec:
+  predictor:
+    maxReplicas: 1
+    minReplicas: 1
+    model:
+      modelFormat:
+        name: vLLM
+      name: ''
+      resources:
+        limits:
+          cpu: '12'
+          memory: 40Gi
+          nvidia.com/gpu: '1'
+        requests:
+          cpu: '4'
+          memory: 16Gi
+          nvidia.com/gpu: '1'
+      runtime: granite-guardian-3.1-8b-vllm
+      storage:
+        key: aws-connection-models
+        path: ibm-granite/granite-guardian-3.1-8b/
+    tolerations:
+      - effect: NoSchedule
+        key: nvidia.com/gpu
+        value: "L40S-gpu"
+        operator: Equal
